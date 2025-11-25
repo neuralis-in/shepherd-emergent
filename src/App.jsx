@@ -1,4 +1,6 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { 
   ArrowRight, 
   Github, 
@@ -22,7 +24,12 @@ import {
   Terminal,
   Box,
   Cpu,
-  Database
+  Database,
+  X,
+  Mail,
+  User,
+  Loader2,
+  Check
 } from 'lucide-react'
 import './App.css'
 
@@ -45,8 +52,196 @@ const scaleIn = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
 }
 
+const modalVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 }
+}
+
+const modalContentVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] } },
+  exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } }
+}
+
+// Book a Demo Modal Component
+function BookDemoModal({ isOpen, onClose }) {
+  const [formData, setFormData] = useState({ name: '', email: '' })
+  const [status, setStatus] = useState('idle') // idle, loading, success, error
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setStatus('loading')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: 'b5090d55-66a0-4e7d-959a-4f90c5eb722d', // Get your key at https://web3forms.com
+          to: 'pranavchiku11@gmail.com',
+          subject: `🚀 Shepherd Demo Request - ${formData.name}`,
+          from_name: 'Shepherd Demo',
+          name: formData.name,
+          email: formData.email,
+          message: `New demo request:\n\nName: ${formData.name}\nEmail: ${formData.email}`,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setStatus('success')
+        setFormData({ name: '', email: '' })
+      } else {
+        throw new Error(data.message || 'Something went wrong')
+      }
+    } catch (error) {
+      setStatus('error')
+      setErrorMessage(error.message || 'Failed to submit. Please try again.')
+    }
+  }
+
+  const handleClose = () => {
+    onClose()
+    // Reset form after animation completes
+    setTimeout(() => {
+      setStatus('idle')
+      setFormData({ name: '', email: '' })
+      setErrorMessage('')
+    }, 300)
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="modal-overlay"
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          onClick={handleClose}
+        >
+          <motion.div
+            className="modal"
+            variants={modalContentVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="modal__close" onClick={handleClose}>
+              <X size={20} />
+            </button>
+
+            {status === 'success' ? (
+              <div className="modal__success">
+                <div className="modal__success-icon">
+                  <Check size={32} />
+                </div>
+                <h2 className="heading-md">You're on the list!</h2>
+                <p className="text-base">
+                  Thanks for your interest in Shepherd. We'll be in touch soon to schedule your demo.
+                </p>
+                <button className="btn btn--primary" onClick={handleClose}>
+                  Done
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="modal__header">
+                  <div className="modal__icon">
+                    <Mail size={24} />
+                  </div>
+                  <h2 className="heading-md">Book a Demo</h2>
+                  <p className="text-base">
+                    See how Shepherd can help you trace and debug your AI agents.
+                  </p>
+                </div>
+
+                <form className="modal__form" onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="name" className="form-label">Name</label>
+                    <div className="form-input-wrapper">
+                      <User size={18} className="form-input-icon" />
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        className="form-input"
+                        placeholder="Your name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        required
+                        disabled={status === 'loading'}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <div className="form-input-wrapper">
+                      <Mail size={18} className="form-input-icon" />
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        className="form-input"
+                        placeholder="you@company.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        required
+                        disabled={status === 'loading'}
+                      />
+                    </div>
+                  </div>
+
+                  {status === 'error' && (
+                    <div className="form-error">
+                      <AlertCircle size={16} />
+                      {errorMessage}
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    className="btn btn--primary btn--full"
+                    disabled={status === 'loading'}
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <Loader2 size={18} className="spinner" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Book Demo
+                        <ArrowRight size={16} />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <p className="modal__footer">
+                  We respect your privacy. No spam, ever.
+                </p>
+              </>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
 // Header Component
-function Header() {
+function Header({ onOpenModal }) {
   return (
     <header className="header">
       <div className="container header__container">
@@ -61,13 +256,17 @@ function Header() {
         </a>
         <nav className="header__nav">
           <a href="#features" className="header__link">Features</a>
+          <Link to="/pricing" className="header__link">Pricing</Link>
           <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer" className="header__link">
             Docs <ExternalLink size={12} />
           </a>
           <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer" className="header__link">
             <Github size={16} />
           </a>
-          <button className="btn btn--primary btn--sm">Get Early Access</button>
+          <Link to="/dashboard" className="btn btn--secondary btn--sm">
+            Dashboard
+          </Link>
+          <button className="btn btn--primary btn--sm" onClick={onOpenModal}>Book a Demo</button>
         </nav>
       </div>
     </header>
@@ -75,7 +274,7 @@ function Header() {
 }
 
 // Hero Section
-function Hero() {
+function Hero({ onOpenModal }) {
   return (
     <section className="hero">
       <div className="hero__bg">
@@ -100,12 +299,12 @@ function Hero() {
             turning opaque agent pipelines into deterministic, debuggable timelines.
           </motion.p>
           <motion.div className="hero__actions" variants={fadeInUp}>
-            <button className="btn btn--primary">
-              Get Early Access <ArrowRight size={16} />
+            <button className="btn btn--primary" onClick={onOpenModal}>
+              Book a Demo <ArrowRight size={16} />
             </button>
-            <button className="btn btn--secondary">
-              <Play size={16} /> View Demo
-            </button>
+            <Link to="/dashboard" className="btn btn--secondary">
+              <Play size={16} /> View Dashboard
+            </Link>
           </motion.div>
         </motion.div>
       </div>
@@ -708,7 +907,7 @@ function WhyShepherd() {
 }
 
 // Final CTA Section
-function FinalCTA() {
+function FinalCTA({ onOpenModal }) {
   return (
     <section className="section final-cta">
       <div className="container container--narrow">
@@ -723,11 +922,11 @@ function FinalCTA() {
             Start tracing your agents today.
           </motion.h2>
           <motion.div className="final-cta__actions" variants={fadeInUp}>
-            <button className="btn btn--primary">
-              Get Early Access <ArrowRight size={16} />
+            <button className="btn btn--primary" onClick={onOpenModal}>
+              Book a Demo <ArrowRight size={16} />
             </button>
-            <button className="btn btn--secondary">
-              Join Waitlist
+            <button className="btn btn--secondary" onClick={onOpenModal}>
+              Contact Us
             </button>
           </motion.div>
         </motion.div>
@@ -753,6 +952,7 @@ function Footer() {
           </a>
         </div>
         <nav className="footer__links">
+          <Link to="/pricing">Pricing</Link>
           <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer">Docs</a>
           <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="#">Privacy</a>
@@ -768,11 +968,16 @@ function Footer() {
 
 // Main App
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
+
   return (
     <div className="app">
-      <Header />
+      <Header onOpenModal={openModal} />
       <main>
-        <Hero />
+        <Hero onOpenModal={openModal} />
         <hr className="divider" />
         <Problem />
         <Solution />
@@ -782,9 +987,10 @@ function App() {
         <Features />
         <JsonTrace />
         <WhyShepherd />
-        <FinalCTA />
+        <FinalCTA onOpenModal={openModal} />
       </main>
       <Footer />
+      <BookDemoModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   )
 }
