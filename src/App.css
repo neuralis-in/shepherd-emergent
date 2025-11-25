@@ -58,13 +58,92 @@
   font-size: 0.8125rem;
 }
 
-@media (max-width: 640px) {
-  .header__nav {
-    gap: var(--spacing-sm);
+/* Mobile Toggle Button */
+.header__mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.header__mobile-toggle:hover {
+  background: var(--color-bg-subtle);
+}
+
+/* Desktop nav visible by default */
+.header__nav--desktop {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* Mobile nav hidden by default */
+.header__nav--mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop nav */
+  .header__nav--desktop {
+    display: none;
   }
   
-  .header__link:not(:has(svg)) {
-    display: none;
+  /* Show mobile toggle */
+  .header__mobile-toggle {
+    display: flex;
+  }
+  
+  /* Mobile navigation dropdown */
+  .header__nav--mobile {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md);
+    gap: 0.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .header__mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+  
+  .header__mobile-link:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+  }
+  
+  .header__mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .header__container {
+    position: relative;
   }
 }
 

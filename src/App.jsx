@@ -242,6 +242,10 @@ function BookDemoModal({ isOpen, onClose }) {
 
 // Header Component
 function Header({ onOpenModal }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const closeMobileMenu = () => setMobileMenuOpen(false)
+
   return (
     <header className="header">
       <div className="container header__container">
@@ -254,7 +258,9 @@ function Header({ onOpenModal }) {
           </svg>
           <span>Shepherd</span>
         </Link>
-        <nav className="header__nav">
+        
+        {/* Desktop Navigation */}
+        <nav className="header__nav header__nav--desktop">
           <a href="#features" className="header__link">Features</a>
           <Link to="/pricing" className="header__link">Pricing</Link>
           <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer" className="header__link">
@@ -268,6 +274,51 @@ function Header({ onOpenModal }) {
           </Link>
           <button className="btn btn--primary btn--sm" onClick={onOpenModal}>Book a Demo</button>
         </nav>
+
+        {/* Mobile Menu Button */}
+        <button 
+          className="header__mobile-toggle" 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X size={24} /> : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile Navigation */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.nav 
+              className="header__nav--mobile"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <a href="#features" className="header__mobile-link" onClick={closeMobileMenu}>Features</a>
+              <Link to="/pricing" className="header__mobile-link" onClick={closeMobileMenu}>Pricing</Link>
+              <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer" className="header__mobile-link">
+                Docs <ExternalLink size={14} />
+              </a>
+              <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer" className="header__mobile-link">
+                <Github size={16} /> GitHub
+              </a>
+              <div className="header__mobile-actions">
+                <Link to="/dashboard" className="btn btn--secondary btn--sm btn--full" onClick={closeMobileMenu}>
+                  Dashboard
+                </Link>
+                <button className="btn btn--primary btn--sm btn--full" onClick={() => { closeMobileMenu(); onOpenModal(); }}>
+                  Book a Demo
+                </button>
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   )
