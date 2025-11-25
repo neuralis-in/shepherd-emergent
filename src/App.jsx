@@ -245,7 +245,7 @@ function Header({ onOpenModal }) {
   return (
     <header className="header">
       <div className="container header__container">
-        <a href="/" className="header__logo">
+        <Link to="/" className="header__logo">
           <svg viewBox="0 0 32 32" className="header__logo-icon">
             <rect width="32" height="32" rx="6" fill="#111"/>
             <path d="M8 12L16 8L24 12L16 16L8 12Z" stroke="white" strokeWidth="1.5" fill="none"/>
@@ -253,7 +253,7 @@ function Header({ onOpenModal }) {
             <path d="M8 20L16 24L24 20" stroke="white" strokeWidth="1.5" fill="none"/>
           </svg>
           <span>Shepherd</span>
-        </a>
+        </Link>
         <nav className="header__nav">
           <a href="#features" className="header__link">Features</a>
           <Link to="/pricing" className="header__link">Pricing</Link>
@@ -941,7 +941,7 @@ function Footer() {
     <footer className="footer">
       <div className="container footer__container">
         <div className="footer__brand">
-          <a href="/" className="footer__logo">
+          <Link to="/" className="footer__logo">
             <svg viewBox="0 0 32 32" className="footer__logo-icon">
               <rect width="32" height="32" rx="6" fill="#111"/>
               <path d="M8 12L16 8L24 12L16 16L8 12Z" stroke="white" strokeWidth="1.5" fill="none"/>
@@ -949,7 +949,7 @@ function Footer() {
               <path d="M8 20L16 24L24 20" stroke="white" strokeWidth="1.5" fill="none"/>
             </svg>
             <span>Shepherd</span>
-          </a>
+          </Link>
         </div>
         <nav className="footer__links">
           <Link to="/pricing">Pricing</Link>
