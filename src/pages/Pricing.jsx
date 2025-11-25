@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -7,7 +8,16 @@ import {
   Zap,
   Building2,
   Github,
-  ExternalLink
+  ExternalLink,
+  X,
+  Calendar,
+  User,
+  Mail,
+  Building,
+  MessageSquare,
+  Send,
+  Loader2,
+  AlertCircle
 } from 'lucide-react'
 import './Pricing.css'
 
@@ -155,6 +165,222 @@ function PricingCard({ plan, onContactClick }) {
   )
 }
 
+function BookDemoModal({ isOpen, onClose }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+    
+    // W3Forms access key - get yours at https://web3forms.com
+    const WEB3FORMS_ACCESS_KEY = 'b5090d55-66a0-4e7d-959a-4f90c5eb722d'
+    
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Shepherd Demo Request from ${formData.name} - ${formData.company}`,
+          from_name: 'Shepherd Demo Form',
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          message: formData.message || 'No message provided'
+        })
+      })
+
+      const result = await response.json()
+      
+      if (result.success) {
+        setIsSubmitted(true)
+      } else {
+        console.error('W3Forms error:', result)
+        setError(result.message || 'Something went wrong. Please try again.')
+      }
+    } catch (err) {
+      console.error('Form submission error:', err)
+      setError('Failed to send. Please try again or email us directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleClose = () => {
+    setFormData({ name: '', email: '', company: '', message: '' })
+    setIsSubmitted(false)
+    setError(null)
+    onClose()
+  }
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          className="demo-modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleClose}
+        >
+          <motion.div 
+            className="demo-modal"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button className="demo-modal__close" onClick={handleClose}>
+              <X size={20} />
+            </button>
+
+            <div className="demo-modal__header">
+              <div className="demo-modal__icon">
+                <Calendar size={24} />
+              </div>
+              <h2 className="demo-modal__title">Book a Demo</h2>
+              <p className="demo-modal__subtitle">
+                See how Shepherd can help you trace and debug your AI agents at scale.
+              </p>
+            </div>
+
+            {isSubmitted ? (
+              <motion.div 
+                className="demo-modal__success"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div className="demo-modal__success-icon">
+                  <Check size={32} />
+                </div>
+                <h3>Request Sent!</h3>
+                <p>We'll be in touch within 24 hours to schedule your demo.</p>
+                <button className="btn btn--primary" onClick={handleClose}>
+                  Done
+                </button>
+              </motion.div>
+            ) : (
+              <form className="demo-modal__form" onSubmit={handleSubmit}>
+                <div className="demo-modal__field">
+                  <label htmlFor="name">
+                    <User size={14} />
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+
+                <div className="demo-modal__field">
+                  <label htmlFor="email">
+                    <Mail size={14} />
+                    Work Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="john@company.com"
+                    required
+                  />
+                </div>
+
+                <div className="demo-modal__field">
+                  <label htmlFor="company">
+                    <Building size={14} />
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    placeholder="Acme Inc."
+                    required
+                  />
+                </div>
+
+                <div className="demo-modal__field">
+                  <label htmlFor="message">
+                    <MessageSquare size={14} />
+                    Tell us about your use case
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="We're building an AI agent for..."
+                    rows={3}
+                  />
+                </div>
+
+                {error && (
+                  <div className="demo-modal__error">
+                    <AlertCircle size={16} />
+                    {error}
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  className="btn btn--primary btn--full demo-modal__submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={18} className="demo-modal__spinner" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      Request Demo
+                    </>
+                  )}
+                </button>
+
+                <p className="demo-modal__note">
+                  We'll reach out within 24 hours to schedule a personalized demo.
+                </p>
+              </form>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
 function FAQ() {
   const faqs = [
     {
@@ -198,13 +424,16 @@ function FAQ() {
 }
 
 export default function Pricing() {
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
+
   const handleContactClick = () => {
-    window.location.href = 'mailto:pranavchiku11@gmail.com?subject=Shepherd Enterprise Inquiry'
+    setIsDemoModalOpen(true)
   }
 
   return (
     <div className="pricing-page">
       <PricingHeader />
+      <BookDemoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
       
       <main className="pricing-main">
         <div className="container">

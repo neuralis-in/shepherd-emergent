@@ -308,6 +308,208 @@
   color: var(--color-text);
 }
 
+/* ========================================
+   BOOK DEMO MODAL
+   ======================================== */
+
+.demo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.demo-modal {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+.demo-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--color-bg-subtle);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.demo-modal__close:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.demo-modal__header {
+  padding: 32px 32px 0;
+  text-align: center;
+}
+
+.demo-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #111 0%, #333 100%);
+  border-radius: 14px;
+  color: white;
+}
+
+.demo-modal__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.demo-modal__subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.demo-modal__form {
+  padding: 24px 32px 32px;
+}
+
+.demo-modal__field {
+  margin-bottom: 16px;
+}
+
+.demo-modal__field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.demo-modal__field label svg {
+  color: var(--color-text-muted);
+}
+
+.demo-modal__field input,
+.demo-modal__field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  outline: none;
+  transition: all 150ms ease;
+}
+
+.demo-modal__field input:focus,
+.demo-modal__field textarea:focus {
+  border-color: var(--color-accent);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+}
+
+.demo-modal__field input::placeholder,
+.demo-modal__field textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.demo-modal__field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.demo-modal__submit {
+  margin-top: 8px;
+  padding: 14px 24px;
+  font-size: 1rem;
+}
+
+.demo-modal__spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.demo-modal__error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  color: #DC2626;
+}
+
+.demo-modal__error svg {
+  flex-shrink: 0;
+}
+
+.demo-modal__note {
+  margin-top: 16px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* Success State */
+.demo-modal__success {
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.demo-modal__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+  background: #ECFDF5;
+  border-radius: 50%;
+  color: #10B981;
+}
+
+.demo-modal__success h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.demo-modal__success p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 24px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .pricing-cards {
@@ -341,6 +543,88 @@
 
   .pricing-cta__buttons .btn {
     width: 100%;
+  }
+
+  /* Modal mobile styles */
+  .demo-modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .demo-modal {
+    max-height: 85vh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .demo-modal__close {
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .demo-modal__header {
+    padding: 24px 20px 0;
+  }
+
+  .demo-modal__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .demo-modal__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .demo-modal__title {
+    font-size: 1.25rem;
+  }
+
+  .demo-modal__subtitle {
+    font-size: 0.875rem;
+  }
+
+  .demo-modal__form {
+    padding: 20px;
+  }
+
+  .demo-modal__field {
+    margin-bottom: 12px;
+  }
+
+  .demo-modal__field label {
+    font-size: 0.75rem;
+  }
+
+  .demo-modal__field input,
+  .demo-modal__field textarea {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    border-radius: 8px;
+  }
+
+  .demo-modal__submit {
+    padding: 12px 20px;
+    font-size: 0.9375rem;
+  }
+
+  .demo-modal__success {
+    padding: 40px 20px;
+  }
+
+  .demo-modal__success-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .demo-modal__success h3 {
+    font-size: 1.125rem;
+  }
+
+  .demo-modal__success p {
+    font-size: 0.875rem;
   }
 }
 

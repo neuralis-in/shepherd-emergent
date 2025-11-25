@@ -1207,7 +1207,7 @@ export default function Playground() {
                 disabled={!hasTraceTree}
               >
                 <Layers size={14} />
-                Tree
+                <span>Tree</span>
               </button>
               <button
                 className={`view-toggle__btn ${viewMode === 'list' ? 'view-toggle__btn--active' : ''}`}
@@ -1215,19 +1215,19 @@ export default function Playground() {
                 disabled={!hasEvents}
               >
                 <Activity size={14} />
-                List
+                <span>List</span>
               </button>
               <button
                 className={`view-toggle__btn ${viewMode === 'analytics' ? 'view-toggle__btn--active' : ''}`}
                 onClick={() => setViewMode('analytics')}
               >
                 <BarChart3 size={14} />
-                Analytics
+                <span>Analytics</span>
               </button>
             </div>
             <button className="playground-btn playground-btn--ghost" onClick={handleClear}>
               <X size={14} />
-              Clear
+              <span>Clear</span>
             </button>
           </div>
         )}
