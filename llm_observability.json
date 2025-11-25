@@ -1,0 +1,699 @@
+{
+    "sessions": [
+      {
+        "id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+        "name": "gemini-example",
+        "started_at": 1764091376.812754,
+        "ended_at": 1764091386.699637,
+        "meta": {
+          "pid": 39697,
+          "cwd": "/Users/pranavchiku/repos/neuralis/aiobs"
+        }
+      }
+    ],
+    "events": [
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "What is the capital of France? Answer in one sentence.",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 8,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 8
+              }
+            ],
+            "prompt_token_count": 12,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 12
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 20,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "The capital of France is Paris.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "The capital of France is Paris.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -8.700294711161405e-05,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091377.1568918,
+        "ended_at": 1764091379.084237,
+        "duration_ms": 1927.345,
+        "callsite": null,
+        "span_id": "0719795a-67b4-425b-b01c-fb45d4c4268e",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9"
+      },
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "Tell me a joke",
+          "system_instruction": null,
+          "config": {
+            "system_instruction": "You are a helpful assistant that tells short, family-friendly jokes.",
+            "temperature": 0.9,
+            "max_output_tokens": 100
+          },
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 16,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 16
+              }
+            ],
+            "prompt_token_count": 18,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 18
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 34,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -0.022454265505075455,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091379.46336,
+        "ended_at": 1764091381.494626,
+        "duration_ms": 2031.266,
+        "callsite": null,
+        "span_id": "3967b753-df84-4546-b11c-4941b943f652",
+        "parent_span_id": "c42bdbb9-de9f-4773-b8a7-d3558b5f04bf",
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9"
+      },
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "My name is Alice. Remember that.",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 14,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 14
+              }
+            ],
+            "prompt_token_count": 8,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 8
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 22,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "Okay, Alice. I will remember that your name is Alice.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Okay, Alice. I will remember that your name is Alice.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -0.04746457508632115,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091382.2197042,
+        "ended_at": 1764091384.19401,
+        "duration_ms": 1974.306,
+        "callsite": null,
+        "span_id": "5d437686-ad7d-41a9-9838-2bc1a0102640",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9"
+      },
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "What is my name?",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 38,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 38
+              }
+            ],
+            "prompt_token_count": 5,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 5
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 43,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "I am an AI language model, and I do not have access to your personal information. Therefore, I don't know your name. You haven't told me your name.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "I am an AI language model, and I do not have access to your personal information. Therefore, I don't know your name. You haven't told me your name.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -0.20729170347514905,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091384.528586,
+        "ended_at": 1764091386.695196,
+        "duration_ms": 2166.61,
+        "callsite": null,
+        "span_id": "ec7e0230-9cf8-46f4-9d8a-58b79e4ac063",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9"
+      }
+    ],
+    "function_events": [
+      {
+        "provider": "function",
+        "api": "__main__.generation_with_system_instruction",
+        "name": "generation_with_system_instruction",
+        "module": "__main__",
+        "args": [],
+        "kwargs": {},
+        "result": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+        "error": null,
+        "started_at": 1764091379.086493,
+        "ended_at": 1764091381.498145,
+        "duration_ms": 2411.652,
+        "callsite": null,
+        "span_id": "c42bdbb9-de9f-4773-b8a7-d3558b5f04bf",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9"
+      }
+    ],
+    "trace_tree": [
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "What is the capital of France? Answer in one sentence.",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 8,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 8
+              }
+            ],
+            "prompt_token_count": 12,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 12
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 20,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "The capital of France is Paris.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "The capital of France is Paris.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -8.700294711161405e-05,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091377.1568918,
+        "ended_at": 1764091379.084237,
+        "duration_ms": 1927.345,
+        "callsite": null,
+        "span_id": "0719795a-67b4-425b-b01c-fb45d4c4268e",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+        "children": [],
+        "event_type": "provider"
+      },
+      {
+        "provider": "function",
+        "api": "__main__.generation_with_system_instruction",
+        "name": "generation_with_system_instruction",
+        "module": "__main__",
+        "args": [],
+        "kwargs": {},
+        "result": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+        "error": null,
+        "started_at": 1764091379.086493,
+        "ended_at": 1764091381.498145,
+        "duration_ms": 2411.652,
+        "callsite": null,
+        "span_id": "c42bdbb9-de9f-4773-b8a7-d3558b5f04bf",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+        "children": [
+          {
+            "provider": "gemini",
+            "api": "models.generate_content",
+            "request": {
+              "model": "gemini-2.0-flash-001",
+              "contents": "Tell me a joke",
+              "system_instruction": null,
+              "config": {
+                "system_instruction": "You are a helpful assistant that tells short, family-friendly jokes.",
+                "temperature": 0.9,
+                "max_output_tokens": 100
+              },
+              "other": {}
+            },
+            "response": {
+              "model": null,
+              "usage": {
+                "cache_tokens_details": null,
+                "cached_content_token_count": null,
+                "candidates_token_count": 16,
+                "candidates_tokens_details": [
+                  {
+                    "modality": "TEXT",
+                    "token_count": 16
+                  }
+                ],
+                "prompt_token_count": 18,
+                "prompt_tokens_details": [
+                  {
+                    "modality": "TEXT",
+                    "token_count": 18
+                  }
+                ],
+                "thoughts_token_count": null,
+                "tool_use_prompt_token_count": null,
+                "tool_use_prompt_tokens_details": null,
+                "total_token_count": 34,
+                "traffic_type": "ON_DEMAND"
+              },
+              "text": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+              "candidates": [
+                {
+                  "content": {
+                    "parts": [
+                      {
+                        "media_resolution": null,
+                        "code_execution_result": null,
+                        "executable_code": null,
+                        "file_data": null,
+                        "function_call": null,
+                        "function_response": null,
+                        "inline_data": null,
+                        "text": "Why did the bicycle fall over? \n\nBecause it was two tired!\n",
+                        "thought": null,
+                        "thought_signature": null,
+                        "video_metadata": null
+                      }
+                    ],
+                    "role": "model"
+                  },
+                  "citation_metadata": null,
+                  "finish_message": null,
+                  "token_count": null,
+                  "finish_reason": "STOP",
+                  "avg_logprobs": -0.022454265505075455,
+                  "grounding_metadata": null,
+                  "index": null,
+                  "logprobs_result": null,
+                  "safety_ratings": null,
+                  "url_context_metadata": null
+                }
+              ]
+            },
+            "error": null,
+            "started_at": 1764091379.46336,
+            "ended_at": 1764091381.494626,
+            "duration_ms": 2031.266,
+            "callsite": null,
+            "span_id": "3967b753-df84-4546-b11c-4941b943f652",
+            "parent_span_id": "c42bdbb9-de9f-4773-b8a7-d3558b5f04bf",
+            "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+            "children": [],
+            "event_type": "provider"
+          }
+        ],
+        "event_type": "function"
+      },
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "My name is Alice. Remember that.",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 14,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 14
+              }
+            ],
+            "prompt_token_count": 8,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 8
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 22,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "Okay, Alice. I will remember that your name is Alice.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "Okay, Alice. I will remember that your name is Alice.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -0.04746457508632115,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091382.2197042,
+        "ended_at": 1764091384.19401,
+        "duration_ms": 1974.306,
+        "callsite": null,
+        "span_id": "5d437686-ad7d-41a9-9838-2bc1a0102640",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+        "children": [],
+        "event_type": "provider"
+      },
+      {
+        "provider": "gemini",
+        "api": "models.generate_content",
+        "request": {
+          "model": "gemini-2.0-flash-001",
+          "contents": "What is my name?",
+          "system_instruction": null,
+          "config": null,
+          "other": {}
+        },
+        "response": {
+          "model": null,
+          "usage": {
+            "cache_tokens_details": null,
+            "cached_content_token_count": null,
+            "candidates_token_count": 38,
+            "candidates_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 38
+              }
+            ],
+            "prompt_token_count": 5,
+            "prompt_tokens_details": [
+              {
+                "modality": "TEXT",
+                "token_count": 5
+              }
+            ],
+            "thoughts_token_count": null,
+            "tool_use_prompt_token_count": null,
+            "tool_use_prompt_tokens_details": null,
+            "total_token_count": 43,
+            "traffic_type": "ON_DEMAND"
+          },
+          "text": "I am an AI language model, and I do not have access to your personal information. Therefore, I don't know your name. You haven't told me your name.\n",
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "I am an AI language model, and I do not have access to your personal information. Therefore, I don't know your name. You haven't told me your name.\n",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null
+                  }
+                ],
+                "role": "model"
+              },
+              "citation_metadata": null,
+              "finish_message": null,
+              "token_count": null,
+              "finish_reason": "STOP",
+              "avg_logprobs": -0.20729170347514905,
+              "grounding_metadata": null,
+              "index": null,
+              "logprobs_result": null,
+              "safety_ratings": null,
+              "url_context_metadata": null
+            }
+          ]
+        },
+        "error": null,
+        "started_at": 1764091384.528586,
+        "ended_at": 1764091386.695196,
+        "duration_ms": 2166.61,
+        "callsite": null,
+        "span_id": "ec7e0230-9cf8-46f4-9d8a-58b79e4ac063",
+        "parent_span_id": null,
+        "session_id": "0251f8d7-0b68-4b8f-afec-509c740d2db9",
+        "children": [],
+        "event_type": "provider"
+      }
+    ],
+    "generated_at": 1764091386.701791,
+    "version": 1
+  }
