@@ -216,6 +216,14 @@
   color: var(--color-text);
 }
 
+.upload-zone__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .upload-zone__button {
   display: inline-flex;
   align-items: center;
@@ -234,6 +242,34 @@
   background: var(--color-accent-hover);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(17, 17, 17, 0.15);
+}
+
+.upload-zone__sample-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--color-text);
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.upload-zone__sample-btn:hover:not(:disabled) {
+  border-color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.08);
+}
+
+.upload-zone__sample-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .upload-zone__hint {

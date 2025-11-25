@@ -19,7 +19,8 @@ import {
   Activity,
   Terminal,
   X,
-  Eye
+  Eye,
+  Play
 } from 'lucide-react'
 import './Playground.css'
 
@@ -382,7 +383,7 @@ function SessionInfo({ session }) {
 }
 
 // Upload Zone Component
-function UploadZone({ onUpload, isDragging, setIsDragging }) {
+function UploadZone({ onUpload, onLoadSample, isDragging, setIsDragging, isLoadingSample }) {
   const handleDragOver = useCallback((e) => {
     e.preventDefault()
     setIsDragging(true)
@@ -427,16 +428,26 @@ function UploadZone({ onUpload, isDragging, setIsDragging }) {
         <p className="upload-zone__desc">
           Drag & drop your <code>llm_observability.json</code> file here, or click to browse
         </p>
-        <label className="upload-zone__button">
-          <Upload size={18} />
-          Select File
-          <input
-            type="file"
-            accept=".json,application/json"
-            onChange={handleFileSelect}
-            hidden
-          />
-        </label>
+        <div className="upload-zone__actions">
+          <label className="upload-zone__button">
+            <Upload size={18} />
+            Select File
+            <input
+              type="file"
+              accept=".json,application/json"
+              onChange={handleFileSelect}
+              hidden
+            />
+          </label>
+          <button 
+            className="upload-zone__sample-btn"
+            onClick={onLoadSample}
+            disabled={isLoadingSample}
+          >
+            <Play size={18} />
+            {isLoadingSample ? 'Loading...' : 'Use Sample Data'}
+          </button>
+        </div>
         <span className="upload-zone__hint">
           Supports JSON files exported from aiobs
         </span>
@@ -483,6 +494,7 @@ export default function Playground() {
   const [error, setError] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [viewMode, setViewMode] = useState('tree') // 'tree' or 'list'
+  const [isLoadingSample, setIsLoadingSample] = useState(false)
 
   const handleUpload = useCallback((file) => {
     const reader = new FileReader()
@@ -503,6 +515,30 @@ export default function Playground() {
       }
     }
     reader.readAsText(file)
+  }, [])
+
+  const handleLoadSample = useCallback(async () => {
+    setIsLoadingSample(true)
+    setError(null)
+    try {
+      const response = await fetch(`${import.meta.env.BASE_URL}sample_observability.json`)
+      if (!response.ok) {
+        throw new Error('Failed to load sample data')
+      }
+      const parsed = await response.json()
+      setData(parsed)
+      // Set view mode based on data
+      if (parsed.trace_tree && parsed.trace_tree.length > 0) {
+        setViewMode('tree')
+      } else {
+        setViewMode('list')
+      }
+    } catch (err) {
+      setError('Failed to load sample data. Please try again.')
+      setData(null)
+    } finally {
+      setIsLoadingSample(false)
+    }
   }, [])
 
   const handleClear = () => {
@@ -560,8 +596,10 @@ export default function Playground() {
             <>
               <UploadZone
                 onUpload={handleUpload}
+                onLoadSample={handleLoadSample}
                 isDragging={isDragging}
                 setIsDragging={setIsDragging}
+                isLoadingSample={isLoadingSample}
               />
               {error && (
                 <motion.div

@@ -355,8 +355,8 @@ function Hero({ onOpenModal }) {
             <button className="btn btn--primary" onClick={onOpenModal}>
               Book a Demo <ArrowRight size={16} />
             </button>
-            <Link to="/dashboard" className="btn btn--secondary">
-              <Play size={16} /> View Dashboard
+            <Link to="/playground" className="btn btn--secondary">
+              <Play size={16} /> Try Playground
             </Link>
           </motion.div>
         </motion.div>
