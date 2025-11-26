@@ -1688,8 +1688,20 @@ function Timeline({ data, isAggregated = false, sessions = [] }) {
   )
 }
 
+// Helper function to get provider from model name
+const getProviderFromModel = (model) => {
+  if (!model) return 'other'
+  const modelLower = model.toLowerCase()
+  if (modelLower.includes('gpt') || modelLower.includes('o1') || modelLower.includes('o3')) return 'openai'
+  if (modelLower.includes('gemini')) return 'gemini'
+  if (modelLower.includes('claude')) return 'anthropic'
+  return 'other'
+}
+
 // Analytics Component
 function Analytics({ data, isAggregated = false, sessions = [] }) {
+  const [costProviderFilter, setCostProviderFilter] = useState('all')
+  
   // Extract all LLM events from trace tree or use flat events
   const llmEvents = useMemo(() => {
     if (isAggregated && sessions.length > 0) {
@@ -1793,8 +1805,13 @@ function Analytics({ data, isAggregated = false, sessions = [] }) {
     return inputCost + outputCost
   }
 
-  const totalCost = llmEvents.reduce((acc, e) => acc + calculateCost(e), 0)
-  const costByModel = llmEvents.reduce((acc, e) => {
+  // Filter events by provider for cost analysis
+  const filteredCostEvents = costProviderFilter === 'all' 
+    ? llmEvents 
+    : llmEvents.filter(e => getProviderFromModel(e.model) === costProviderFilter)
+  
+  const totalCost = filteredCostEvents.reduce((acc, e) => acc + calculateCost(e), 0)
+  const costByModel = filteredCostEvents.reduce((acc, e) => {
     const model = e.model || 'unknown'
     if (!acc[model]) acc[model] = { cost: 0, count: 0, tokens: 0 }
     acc[model].cost += calculateCost(e)
@@ -1892,25 +1909,60 @@ function Analytics({ data, isAggregated = false, sessions = [] }) {
         </div>
 
         <div className="analytics-section">
-          <h3 className="analytics-section__title">
-            <DollarSign size={16} />
-            Cost Analysis (Estimated)
-          </h3>
+          <div className="analytics-section__header">
+            <h3 className="analytics-section__title">
+              <DollarSign size={16} />
+              Cost Analysis (Estimated)
+            </h3>
+            <div className="cost-provider-filter">
+              <button 
+                className={`cost-provider-filter__btn ${costProviderFilter === 'all' ? 'cost-provider-filter__btn--active' : ''}`}
+                onClick={() => setCostProviderFilter('all')}
+              >
+                All
+              </button>
+              <button 
+                className={`cost-provider-filter__btn ${costProviderFilter === 'openai' ? 'cost-provider-filter__btn--active' : ''}`}
+                onClick={() => setCostProviderFilter('openai')}
+              >
+                OpenAI
+              </button>
+              <button 
+                className={`cost-provider-filter__btn ${costProviderFilter === 'gemini' ? 'cost-provider-filter__btn--active' : ''}`}
+                onClick={() => setCostProviderFilter('gemini')}
+              >
+                Gemini
+              </button>
+              <button 
+                className="cost-provider-filter__btn cost-provider-filter__btn--disabled"
+                disabled
+                title="Coming soon"
+              >
+                Other
+              </button>
+            </div>
+          </div>
           <div className="cost-analysis">
             <div className="cost-total">
               <span className="cost-total__label">Total Estimated Cost</span>
               <span className="cost-total__value">${totalCost.toFixed(4)}</span>
             </div>
             <div className="cost-by-model">
-              {Object.entries(costByModel).map(([model, modelData]) => (
-                <div key={model} className="cost-model-item">
-                  <div className="cost-model-item__info">
-                    <span className="cost-model-item__name">{model}</span>
-                    <span className="cost-model-item__count">{modelData.count} calls • {modelData.tokens.toLocaleString()} tokens</span>
+              {Object.entries(costByModel).length > 0 ? (
+                Object.entries(costByModel).map(([model, modelData]) => (
+                  <div key={model} className="cost-model-item">
+                    <div className="cost-model-item__info">
+                      <span className="cost-model-item__name">{model}</span>
+                      <span className="cost-model-item__count">{modelData.count} calls • {modelData.tokens.toLocaleString()} tokens</span>
+                    </div>
+                    <span className="cost-model-item__cost">${modelData.cost.toFixed(4)}</span>
                   </div>
-                  <span className="cost-model-item__cost">${modelData.cost.toFixed(4)}</span>
+                ))
+              ) : (
+                <div className="cost-empty">
+                  <span>No models found for this provider</span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>

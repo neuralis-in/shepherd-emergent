@@ -3318,6 +3318,84 @@
 }
 
 /* Cost Analysis */
+.analytics-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.analytics-section__header .analytics-section__title {
+  margin-bottom: 0;
+}
+
+.cost-provider-filter {
+  display: flex;
+  gap: 4px;
+  background: var(--color-bg-subtle);
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.cost-provider-filter__btn {
+  padding: 5px 10px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.cost-provider-filter__btn:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.cost-provider-filter__btn--active {
+  background: var(--color-bg) !important;
+  color: var(--color-accent) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.cost-provider-filter__btn--disabled {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.cost-provider-filter__btn--disabled::after {
+  content: 'Soon';
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  font-size: 0.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  padding: 1px 4px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cost-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  background: var(--color-bg-subtle);
+  border-radius: 6px;
+}
+
 .cost-analysis {
   display: flex;
   flex-direction: column;
@@ -4590,6 +4668,36 @@
   }
 
   /* Cost Analysis */
+  .analytics-section__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cost-provider-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cost-provider-filter__btn {
+    flex: 1;
+    padding: 4px 6px;
+    font-size: 0.625rem;
+    text-align: center;
+  }
+
+  .cost-provider-filter__btn--disabled::after {
+    font-size: 0.4375rem;
+    padding: 1px 3px;
+    top: -5px;
+    right: -2px;
+  }
+
+  .cost-empty {
+    padding: 14px;
+    font-size: 0.6875rem;
+  }
+
   .cost-analysis {
     gap: 10px;
   }
