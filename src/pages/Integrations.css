@@ -1,0 +1,800 @@
+/* ========================================
+   INTEGRATIONS PAGE
+   ======================================== */
+
+.integrations-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FAFAFA 0%, #FFFFFF 100%);
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.integrations-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.integrations-header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.integrations-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  transition: all 150ms ease;
+}
+
+.integrations-header__back:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+}
+
+.integrations-header__title h1 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.integrations-header__subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+
+.integrations-main {
+  padding-top: 88px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 80px;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.integrations-hero {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.integrations-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+  border: 1px solid #C7D2FE;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4338CA;
+  margin-bottom: 24px;
+}
+
+.integrations-hero__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+  margin: 0 0 20px;
+}
+
+.integrations-hero__description {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   INTEGRATION SELECTOR
+   ======================================== */
+
+.integrations-selector {
+  margin-bottom: 48px;
+}
+
+.integrations-selector__title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+.integrations-selector__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+/* Integration Card */
+.integration-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: white;
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.integration-card:hover {
+  border-color: var(--accent-color, var(--color-text-muted));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.integration-card--selected {
+  border-color: var(--accent-color, var(--color-accent));
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(99, 102, 241, 0.08) 100%);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.integration-card__icon {
+  font-size: 2rem;
+}
+
+.integration-card__content {
+  text-align: center;
+}
+
+.integration-card__name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.integration-card__full-name {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  margin: 2px 0 0;
+}
+
+.integration-card__check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #10B981;
+}
+
+/* ========================================
+   FLOW DIAGRAM
+   ======================================== */
+
+.integrations-flow {
+  margin-bottom: 48px;
+  padding: 32px;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+}
+
+.integrations-flow__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 32px;
+}
+
+.integrations-flow__title svg {
+  color: var(--color-text-muted);
+}
+
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.flow-diagram__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-diagram__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100px;
+  height: 80px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 200ms ease;
+}
+
+.flow-diagram__node--agent {
+  background: #F5F5F5;
+  border: 1px solid #E5E5E5;
+  color: var(--color-text);
+}
+
+.flow-diagram__node--aiobs {
+  background: linear-gradient(135deg, #111 0%, #333 100%);
+  color: white;
+}
+
+.flow-diagram__node--flush {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #059669;
+}
+
+.flow-diagram__node--storage {
+  background: white;
+  border: 2px solid;
+  transition: all 300ms ease;
+}
+
+.flow-diagram__node--dashboard {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: white;
+}
+
+.flow-diagram__label {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.flow-diagram__arrow {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  padding: 0 4px;
+}
+
+.flow-diagram__arrow--subscribe {
+  flex-direction: column;
+  gap: 2px;
+  color: #6366F1;
+  font-size: 0.5625rem;
+  font-weight: 500;
+}
+
+/* ========================================
+   INTEGRATION DETAILS
+   ======================================== */
+
+.integrations-details {
+  margin-bottom: 48px;
+}
+
+.integrations-details__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 24px;
+}
+
+.integrations-details__info {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.integrations-details__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.integrations-details__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.integrations-details__description {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.integrations-details__features h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin: 0 0 12px;
+}
+
+.integrations-details__features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.integrations-details__features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.integrations-details__features li svg {
+  color: #10B981;
+  flex-shrink: 0;
+}
+
+.integrations-details__code {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Code Block */
+.code-block {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-block__title {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.code-block__copy {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.code-block__copy:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.code-block__copy svg {
+  color: #10B981;
+}
+
+.code-block__content {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.code-block__content pre {
+  margin: 0;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: #E5E5E5;
+}
+
+.code-block__content code {
+  color: inherit;
+}
+
+/* ========================================
+   HOW IT WORKS
+   ======================================== */
+
+.integrations-how {
+  margin-bottom: 48px;
+  padding: 40px;
+  background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+  border-radius: 20px;
+}
+
+.integrations-how__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 40px;
+}
+
+.integrations-how__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.integrations-how__step {
+  text-align: center;
+  position: relative;
+}
+
+.integrations-how__step-number {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  background: var(--color-accent);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.integrations-how__step-icon {
+  width: 64px;
+  height: 64px;
+  margin: 20px auto 16px;
+  background: white;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.integrations-how__step h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.integrations-how__step p {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.integrations-how__step code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: #E0E7FF;
+  color: #4338CA;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ========================================
+   BENEFITS
+   ======================================== */
+
+.integrations-benefits {
+  margin-bottom: 48px;
+}
+
+.integrations-benefits__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 32px;
+}
+
+.integrations-benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.integrations-benefits__card {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 24px;
+  transition: all 200ms ease;
+}
+
+.integrations-benefits__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.integrations-benefits__icon {
+  width: 44px;
+  height: 44px;
+  background: var(--color-bg-subtle);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+
+.integrations-benefits__card h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.integrations-benefits__card p {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ========================================
+   CTA
+   ======================================== */
+
+.integrations-cta {
+  text-align: center;
+  padding: 48px;
+  background: linear-gradient(135deg, #111 0%, #1a1a2e 100%);
+  border-radius: 24px;
+}
+
+.integrations-cta__content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.integrations-cta__content p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 28px;
+}
+
+.integrations-cta__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.integrations-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+  border: none;
+  font-family: inherit;
+}
+
+.integrations-cta__btn--primary {
+  background: white;
+  color: #111;
+}
+
+.integrations-cta__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+}
+
+.integrations-cta__btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.integrations-cta__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .integrations-selector__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .integrations-details__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .integrations-how__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .integrations-benefits__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .integrations-hero__title {
+    font-size: 1.75rem;
+  }
+
+  .integrations-hero__description {
+    font-size: 1rem;
+  }
+
+  .integrations-selector__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flow-diagram {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .flow-diagram__arrow {
+    transform: rotate(90deg);
+  }
+
+  .flow-diagram__arrow--subscribe {
+    transform: none;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .integrations-flow {
+    padding: 24px 16px;
+  }
+
+  .integrations-how {
+    padding: 32px 20px;
+  }
+
+  .integrations-cta {
+    padding: 32px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .integrations-main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .integrations-hero {
+    padding: 40px 0;
+  }
+
+  .integrations-hero__title {
+    font-size: 1.5rem;
+  }
+
+  .integrations-selector__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .integration-card {
+    padding: 16px 12px;
+  }
+
+  .integration-card__icon {
+    font-size: 1.5rem;
+  }
+
+  .integration-card__name {
+    font-size: 0.8125rem;
+  }
+
+  .integration-card__full-name {
+    display: none;
+  }
+
+  .flow-diagram__node {
+    width: 80px;
+    height: 64px;
+    font-size: 0.6875rem;
+  }
+
+  .flow-diagram__node svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .integrations-details__info {
+    padding: 20px;
+  }
+
+  .integrations-details__icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .integrations-details__name {
+    font-size: 1.125rem;
+  }
+
+  .code-block__content pre {
+    font-size: 0.6875rem;
+  }
+
+  .integrations-how__step-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .integrations-benefits__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .integrations-cta__content h3 {
+    font-size: 1.25rem;
+  }
+
+  .integrations-cta__actions {
+    flex-direction: column;
+  }
+
+  .integrations-cta__btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

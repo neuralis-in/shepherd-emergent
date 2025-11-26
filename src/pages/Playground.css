@@ -279,6 +279,96 @@
   color: var(--color-text-muted);
 }
 
+/* Cloud Integration Teaser */
+.upload-zone__cloud-teaser {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.upload-zone__cloud-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.upload-zone__cloud-divider::before,
+.upload-zone__cloud-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.upload-zone__cloud-divider span {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.upload-zone__cloud-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-zone__cloud-link:hover {
+  border-color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.08);
+}
+
+.upload-zone__cloud-icon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.upload-zone__cloud-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.upload-zone__cloud-badge {
+  padding: 2px 6px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 4px;
+}
+
+.upload-zone__cloud-desc {
+  display: none;
+}
+
+.upload-zone__cloud-arrow {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.upload-zone__cloud-link:hover .upload-zone__cloud-arrow {
+  transform: translateX(2px);
+  color: var(--color-text);
+}
+
 .upload-zone__pattern {
   position: absolute;
   inset: 0;
@@ -3052,6 +3142,29 @@
   .upload-zone__hint {
     font-size: 0.6875rem;
     margin-top: 12px;
+  }
+
+  .upload-zone__cloud-teaser {
+    margin-top: 20px;
+  }
+
+  .upload-zone__cloud-link {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .upload-zone__cloud-title {
+    font-size: 0.875rem;
+  }
+
+  .upload-zone__cloud-badge {
+    font-size: 0.5625rem;
+  }
+
+  .upload-zone__cloud-arrow {
+    display: none;
   }
 
   /* Session Info */

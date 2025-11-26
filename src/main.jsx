@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Pricing from './pages/Pricing.jsx'
 import Playground from './pages/Playground.jsx'
+import Integrations from './pages/Integrations.jsx'
 
 // Use Vite's BASE_URL which is set from vite.config.js base option
 const basename = import.meta.env.BASE_URL
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/playground" element={<Playground />} />
+        <Route path="/integrations" element={<Integrations />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

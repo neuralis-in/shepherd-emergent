@@ -35,7 +35,8 @@ import {
   Trash2,
   Plus,
   LineChart,
-  Circle
+  Circle,
+  Cloud
 } from 'lucide-react'
 import './Playground.css'
 
@@ -465,6 +466,18 @@ function UploadZone({ onUpload, onLoadSample, isDragging, setIsDragging, isLoadi
         <span className="upload-zone__hint">
           Supports multiple JSON files exported from aiobs
         </span>
+
+        <div className="upload-zone__cloud-teaser">
+          <div className="upload-zone__cloud-divider">
+            <span>or</span>
+          </div>
+          <Link to="/integrations" className="upload-zone__cloud-link">
+            <Cloud size={18} className="upload-zone__cloud-icon" />
+            <span className="upload-zone__cloud-title">Cloud Integration</span>
+            <span className="upload-zone__cloud-badge">Coming Soon</span>
+            <ChevronRight size={16} className="upload-zone__cloud-arrow" />
+          </Link>
+        </div>
       </div>
       <div className="upload-zone__pattern" />
     </motion.div>
