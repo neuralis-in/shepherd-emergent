@@ -1742,14 +1742,36 @@ function SessionSidebar({ sessions, selectedSession, onSelectSession, onRemoveSe
   )
 }
 
+// Validation helper
+function validateObservabilityJson(data, fileName) {
+  // Check if sessions key exists and is an array
+  if (!data.sessions || !Array.isArray(data.sessions)) {
+    return {
+      valid: false,
+      error: `"${fileName}" is not a valid aiobs observability file. Missing "sessions" array.`
+    }
+  }
+  
+  // Check if sessions array has at least one entry with an id
+  if (data.sessions.length === 0 || !data.sessions[0]?.id) {
+    return {
+      valid: false,
+      error: `"${fileName}" is not a valid aiobs observability file. Sessions must contain at least one entry with an "id".`
+    }
+  }
+  
+  return { valid: true }
+}
+
 // Main Playground Component
 export default function Playground() {
   const [sessions, setSessions] = useState([])
   const [selectedSessionId, setSelectedSessionId] = useState(null)
   const [error, setError] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [viewMode, setViewMode] = useState('analytics') // 'tree', 'list', or 'analytics'
+  const [viewMode, setViewMode] = useState('analytics') // 'tree', 'list', 'analytics', or 'timeline'
   const [isLoadingSample, setIsLoadingSample] = useState(false)
+  const [validationError, setValidationError] = useState(null)
 
   const selectedSession = useMemo(() => {
     if (selectedSessionId === null) return null
@@ -1759,10 +1781,24 @@ export default function Playground() {
   const currentData = selectedSession?.data || null
 
   const handleUpload = useCallback((file) => {
+    // Only accept JSON files
+    if (!file.name.endsWith('.json') && file.type !== 'application/json') {
+      setValidationError(`"${file.name}" is not a JSON file. Only JSON files are supported.`)
+      return
+    }
+
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
         const parsed = JSON.parse(e.target.result)
+        
+        // Validate the JSON structure
+        const validation = validateObservabilityJson(parsed, file.name)
+        if (!validation.valid) {
+          setValidationError(validation.error)
+          return
+        }
+
         const newSession = {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           fileName: file.name,
@@ -1771,6 +1807,7 @@ export default function Playground() {
         }
         setSessions(prev => [...prev, newSession])
         setError(null)
+        setValidationError(null)
         
         // If this is the first session or no session is selected, show overview
         if (sessions.length === 0) {
@@ -1778,7 +1815,7 @@ export default function Playground() {
           setViewMode('analytics')
         }
       } catch (err) {
-        setError(`Invalid JSON file: ${file.name}. Please upload valid llm_observability.json files.`)
+        setValidationError(`"${file.name}" contains invalid JSON. Please upload valid llm_observability.json files.`)
       }
     }
     reader.readAsText(file)
@@ -1787,12 +1824,21 @@ export default function Playground() {
   const handleLoadSample = useCallback(async () => {
     setIsLoadingSample(true)
     setError(null)
+    setValidationError(null)
     try {
       const response = await fetch(`${import.meta.env.BASE_URL}sample_observability.json`)
       if (!response.ok) {
         throw new Error('Failed to load sample data')
       }
       const parsed = await response.json()
+      
+      // Validate the JSON structure
+      const validation = validateObservabilityJson(parsed, 'sample_observability.json')
+      if (!validation.valid) {
+        setValidationError(validation.error)
+        return
+      }
+
       const newSession = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         fileName: 'sample_observability.json',
@@ -1830,6 +1876,42 @@ export default function Playground() {
 
   return (
     <div className="playground">
+      {/* Validation Error Popup */}
+      <AnimatePresence>
+        {validationError && (
+          <motion.div
+            className="validation-popup-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setValidationError(null)}
+          >
+            <motion.div
+              className="validation-popup"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="validation-popup__icon">
+                <AlertCircle size={32} />
+              </div>
+              <h3 className="validation-popup__title">Invalid File Format</h3>
+              <p className="validation-popup__message">{validationError}</p>
+              <p className="validation-popup__hint">
+                This file was not generated by <strong>aiobs</strong> and is not supported.
+              </p>
+              <button
+                className="validation-popup__btn"
+                onClick={() => setValidationError(null)}
+              >
+                Got it
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <header className="playground-header">
         <div className="playground-header__left">
           <Link to="/" className="playground-header__back">

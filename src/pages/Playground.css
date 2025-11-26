@@ -1262,6 +1262,131 @@
 }
 
 /* ========================================
+   VALIDATION ERROR POPUP
+   ======================================== */
+
+.validation-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.validation-popup {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.validation-popup__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: #FEF2F2;
+  border-radius: 50%;
+  color: #DC2626;
+}
+
+.validation-popup__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 12px;
+}
+
+.validation-popup__message {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 12px;
+  word-break: break-word;
+}
+
+.validation-popup__hint {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin: 0 0 24px;
+  padding: 12px;
+  background: #FEF2F2;
+  border-radius: 8px;
+  border: 1px solid #FECACA;
+}
+
+.validation-popup__hint strong {
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.validation-popup__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: white;
+  background: var(--color-accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-family: inherit;
+}
+
+.validation-popup__btn:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .validation-popup {
+    padding: 24px;
+    border-radius: 16px;
+  }
+
+  .validation-popup__icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+  }
+
+  .validation-popup__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .validation-popup__title {
+    font-size: 1.125rem;
+  }
+
+  .validation-popup__message {
+    font-size: 0.8125rem;
+  }
+
+  .validation-popup__hint {
+    font-size: 0.75rem;
+    padding: 10px;
+  }
+
+  .validation-popup__btn {
+    width: 100%;
+    padding: 12px 24px;
+  }
+}
+
+/* ========================================
    TIMELINE VIEW
    ======================================== */
 
