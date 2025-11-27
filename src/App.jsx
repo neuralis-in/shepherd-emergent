@@ -37,7 +37,9 @@ import {
   HardDrive,
   BarChart3,
   TrendingUp,
-  PieChart
+  PieChart,
+  ChevronDown,
+  ChevronRight
 } from 'lucide-react'
 import './App.css'
 
@@ -546,6 +548,359 @@ function BrokenPipeline() {
   )
 }
 
+// Demo Details Panel Component (Right side)
+function DemoDetailsPanel({ node }) {
+  if (!node || !node.details) {
+    return (
+      <div className="demo-details-panel demo-details-panel--empty">
+        <div className="demo-details-panel__placeholder">
+          <Cpu size={32} />
+          <p>Select an LLM call to view details</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <motion.div 
+      className="demo-details-panel"
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      key={node.details.input}
+    >
+      <div className="demo-details-panel__header">
+        <div className="demo-details-panel__title">
+          <Cpu size={14} />
+          <span>{node.name}</span>
+        </div>
+        <span className="demo-details-panel__model">{node.details.model}</span>
+      </div>
+
+      <div className="demo-details-panel__body">
+        {/* Input/Prompt */}
+        <div className="demo-details-panel__section">
+          <h4><Terminal size={12} /> Input</h4>
+          <p className="demo-details-panel__text">{node.details.input}</p>
+        </div>
+
+        {/* Model Config */}
+        <div className="demo-details-panel__section">
+          <h4><Code size={12} /> Configuration</h4>
+          <div className="demo-details-panel__config">
+            <div className="demo-details-panel__config-item">
+              <span>temperature</span>
+              <code>{node.details.config.temperature}</code>
+            </div>
+            <div className="demo-details-panel__config-item">
+              <span>max_tokens</span>
+              <code>{node.details.config.max_tokens}</code>
+            </div>
+            <div className="demo-details-panel__config-item">
+              <span>top_p</span>
+              <code>{node.details.config.top_p}</code>
+            </div>
+          </div>
+        </div>
+
+        {/* Output */}
+        <div className="demo-details-panel__section">
+          <h4><CheckCircle size={12} /> Output</h4>
+          <p className="demo-details-panel__text demo-details-panel__text--output">{node.details.output}</p>
+        </div>
+
+        {/* Usage Stats */}
+        <div className="demo-details-panel__section">
+          <h4><BarChart3 size={12} /> Usage</h4>
+          <div className="demo-details-panel__stats">
+            <div className="demo-details-panel__stat">
+              <span className="demo-details-panel__stat-value">{node.details.tokens.input}</span>
+              <span className="demo-details-panel__stat-label">Input</span>
+            </div>
+            <div className="demo-details-panel__stat">
+              <span className="demo-details-panel__stat-value">{node.details.tokens.output}</span>
+              <span className="demo-details-panel__stat-label">Output</span>
+            </div>
+            <div className="demo-details-panel__stat">
+              <span className="demo-details-panel__stat-value">{node.details.tokens.total}</span>
+              <span className="demo-details-panel__stat-label">Total</span>
+            </div>
+            <div className="demo-details-panel__stat demo-details-panel__stat--highlight">
+              <span className="demo-details-panel__stat-value">{node.duration}</span>
+              <span className="demo-details-panel__stat-label">Duration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// Demo Trace Tree Node Component for Landing Page
+function DemoTreeNode({ node, depth = 0, index = 0, selectedNode, onSelectNode }) {
+  const [isExpanded, setIsExpanded] = useState(true)
+  const hasChildren = node.children && node.children.length > 0
+  const isSelected = selectedNode === node
+  const isLLM = node.type === 'llm'
+
+  const getNodeIcon = () => {
+    if (node.type === 'function') {
+      return <Terminal size={14} />
+    }
+    return <Cpu size={14} />
+  }
+
+  const handleClick = () => {
+    if (isLLM && node.details) {
+      onSelectNode(isSelected ? null : node)
+    }
+  }
+
+  return (
+    <motion.div
+      className="demo-tree-node"
+      initial={{ opacity: 0, x: -10 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.05 }}
+      viewport={{ once: true }}
+    >
+      <div
+        className={`demo-tree-node__content demo-tree-node__content--${node.status}${isSelected ? ' demo-tree-node__content--selected' : ''}${isLLM && node.details ? ' demo-tree-node__content--clickable' : ''}`}
+        style={{ paddingLeft: `${depth * 20 + 12}px` }}
+        onClick={handleClick}
+      >
+        {hasChildren ? (
+          <button
+            className="demo-tree-node__toggle"
+            onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded) }}
+          >
+            {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          </button>
+        ) : (
+          <span className="demo-tree-node__toggle demo-tree-node__toggle--empty" />
+        )}
+
+        <div className={`demo-tree-node__icon demo-tree-node__icon--${node.type}`}>
+          {getNodeIcon()}
+        </div>
+
+        <div className="demo-tree-node__info">
+          <span className="demo-tree-node__label">{node.name}</span>
+          {node.model && (
+            <span className="demo-tree-node__sublabel">{node.model}</span>
+          )}
+        </div>
+
+        <div className="demo-tree-node__meta">
+          {node.duration && (
+            <span className="demo-tree-node__duration">
+              <Clock size={12} />
+              {node.duration}
+            </span>
+          )}
+          <span className={`demo-tree-node__status demo-tree-node__status--${node.status}`}>
+            {node.status === 'error' ? <AlertCircle size={14} /> : <CheckCircle size={14} />}
+          </span>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && hasChildren && (
+          <motion.div
+            className="demo-tree-node__children"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {node.children.map((child, i) => (
+              <DemoTreeNode 
+                key={i} 
+                node={child} 
+                depth={depth + 1} 
+                index={i}
+                selectedNode={selectedNode}
+                onSelectNode={onSelectNode}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
+// Demo Trace Tree Component
+function DemoTraceTree() {
+  // Set initial selected node to the first LLM call
+  const firstLLMCall = {
+    name: 'chat.completions',
+    type: 'llm',
+    model: 'gpt-4o',
+    duration: '1.8s',
+    status: 'success',
+    details: {
+      input: 'Plan a 3-day trip to Tokyo for a family of 4. Include flights, hotels, and activities. Budget: $5000.',
+      model: 'gpt-4o',
+      config: {
+        temperature: 0.7,
+        max_tokens: 2048,
+        top_p: 0.95
+      },
+      output: 'I\'ll help you plan a wonderful 3-day Tokyo trip! Let me search for the best flights and hotels within your budget...',
+      tokens: {
+        input: 142,
+        output: 856,
+        total: 998
+      }
+    },
+    children: []
+  }
+
+  const [selectedNode, setSelectedNode] = useState(firstLLMCall)
+
+  const demoData = [
+    {
+      name: 'travel_agent.plan_trip',
+      type: 'function',
+      duration: '4.2s',
+      status: 'success',
+      children: [
+        firstLLMCall,
+        {
+          name: 'search_flights',
+          type: 'function',
+          duration: '890ms',
+          status: 'success',
+          children: [
+            {
+              name: 'chat.completions',
+              type: 'llm',
+              model: 'gpt-4o-mini',
+              duration: '420ms',
+              status: 'success',
+              details: {
+                input: 'Extract flight search parameters: destination Tokyo, 4 passengers, budget constraint $2000 for flights.',
+                model: 'gpt-4o-mini',
+                config: {
+                  temperature: 0.3,
+                  max_tokens: 512,
+                  top_p: 0.9
+                },
+                output: '{"destination": "NRT", "passengers": 4, "max_price": 2000, "class": "economy"}',
+                tokens: {
+                  input: 89,
+                  output: 124,
+                  total: 213
+                }
+              },
+              children: []
+            }
+          ]
+        },
+        {
+          name: 'book_hotel',
+          type: 'function',
+          duration: '1.2s',
+          status: 'success',
+          children: [
+            {
+              name: 'chat.completions',
+              type: 'llm',
+              model: 'gpt-4o-mini',
+              duration: '380ms',
+              status: 'success',
+              details: {
+                input: 'Find family-friendly hotels in Shinjuku, Tokyo. 2 rooms, 3 nights. Budget: $1500.',
+                model: 'gpt-4o-mini',
+                config: {
+                  temperature: 0.4,
+                  max_tokens: 1024,
+                  top_p: 0.9
+                },
+                output: 'Found 3 options: 1) Keio Plaza Hotel - $420/night, 2) Hilton Tokyo - $380/night, 3) Hotel Sunroute - $280/night',
+                tokens: {
+                  input: 76,
+                  output: 245,
+                  total: 321
+                }
+              },
+              children: []
+            },
+            {
+              name: 'validate_booking',
+              type: 'function',
+              duration: '45ms',
+              status: 'success',
+              children: []
+            }
+          ]
+        },
+        {
+          name: 'chat.completions',
+          type: 'llm',
+          model: 'gpt-4o',
+          duration: '920ms',
+          status: 'success',
+          details: {
+            input: 'Generate final itinerary summary with all bookings: flights, hotel, and suggested activities for 3 days in Tokyo.',
+            model: 'gpt-4o',
+            config: {
+              temperature: 0.8,
+              max_tokens: 2048,
+              top_p: 0.95
+            },
+            output: '🗼 Your Tokyo Adventure Awaits!\n\nDay 1: Arrive at Narita, check into Keio Plaza Hotel, explore Shinjuku...\nDay 2: Visit Senso-ji Temple, teamLab Borderless, Shibuya Crossing...\nDay 3: Tsukiji Market, Imperial Palace, departure...',
+            tokens: {
+              input: 234,
+              output: 1247,
+              total: 1481
+            }
+          },
+          children: []
+        }
+      ]
+    }
+  ]
+
+  return (
+    <div className="demo-trace-tree">
+      <div className="demo-trace-tree__header">
+        <div className="demo-trace-tree__dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span className="demo-trace-tree__title">
+          <Layers size={14} />
+          Trace Tree
+        </span>
+        <span className="demo-trace-tree__badge">Live Demo</span>
+      </div>
+      <div className="demo-trace-tree__split">
+        <div className="demo-trace-tree__left">
+          <div className="demo-trace-tree__body">
+            {demoData.map((trace, i) => (
+              <DemoTreeNode 
+                key={i} 
+                node={trace} 
+                index={i}
+                selectedNode={selectedNode}
+                onSelectNode={setSelectedNode}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="demo-trace-tree__right">
+          <DemoDetailsPanel node={selectedNode} />
+        </div>
+      </div>
+      <div className="demo-trace-tree__footer">
+        <Link to="/playground" className="demo-trace-tree__link">
+          Try with your own traces <ArrowRight size={14} />
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 // Solution Section
 function Solution() {
   const traces = [
@@ -582,8 +937,8 @@ function Solution() {
               </span>
             ))}
           </motion.div>
-          <motion.div className="solution__mockup" variants={scaleIn}>
-            <TimelineMockup />
+          <motion.div className="solution__demo" variants={scaleIn}>
+            <DemoTraceTree />
           </motion.div>
         </motion.div>
       </div>
