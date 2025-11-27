@@ -278,6 +278,9 @@ function Header({ onOpenModal }) {
           <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer" className="header__link">
             <Github size={16} />
           </a>
+          <Link to="/api-keys" className="btn btn--secondary btn--sm">
+            API Keys
+          </Link>
           <Link to="/playground" className="btn btn--secondary btn--sm">
             Playground
           </Link>
@@ -319,6 +322,9 @@ function Header({ onOpenModal }) {
                 <Github size={16} /> GitHub
               </a>
               <div className="header__mobile-actions">
+                <Link to="/api-keys" className="btn btn--secondary btn--sm btn--full" onClick={closeMobileMenu}>
+                  API Keys
+                </Link>
                 <Link to="/playground" className="btn btn--secondary btn--sm btn--full" onClick={closeMobileMenu}>
                   Playground
                 </Link>

@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard.jsx'
 import Pricing from './pages/Pricing.jsx'
 import Playground from './pages/Playground.jsx'
 import Integrations from './pages/Integrations.jsx'
+import ApiKeys from './pages/ApiKeys.jsx'
+import AuthCallback from './pages/AuthCallback.jsx'
 
 // Use Vite's BASE_URL which is set from vite.config.js base option
 const basename = import.meta.env.BASE_URL
@@ -20,6 +22,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/playground" element={<Playground />} />
         <Route path="/integrations" element={<Integrations />} />
+        <Route path="/api-keys" element={<ApiKeys />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
