@@ -72,6 +72,7 @@ const plans = [
       'Dedicated success manager',
       'PII detection & compliance',
       'Custom provider support',
+      { text: 'Self-healing prompts', comingSoon: true },
     ],
     cta: 'Contact Sales',
     ctaAction: 'contact',
@@ -132,12 +133,21 @@ function PricingCard({ plan, onContactClick }) {
       </div>
 
       <ul className="pricing-card__features">
-        {plan.features.map((feature, i) => (
-          <li key={i} className="pricing-card__feature">
-            <Check size={16} className="pricing-card__check" />
-            <span>{feature}</span>
-          </li>
-        ))}
+        {plan.features.map((feature, i) => {
+          const isObject = typeof feature === 'object'
+          const featureText = isObject ? feature.text : feature
+          const isComingSoon = isObject && feature.comingSoon
+          
+          return (
+            <li key={i} className="pricing-card__feature">
+              <Check size={16} className="pricing-card__check" />
+              <span>{featureText}</span>
+              {isComingSoon && (
+                <span className="pricing-card__coming-soon">Coming Soon</span>
+              )}
+            </li>
+          )
+        })}
       </ul>
 
       <div className="pricing-card__cta">

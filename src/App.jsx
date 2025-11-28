@@ -42,6 +42,7 @@ import {
   ChevronRight
 } from 'lucide-react'
 import './App.css'
+import PromptEnhancement from './components/PromptEnhancement'
 
 // Animation variants
 const fadeInUp = {
@@ -1775,6 +1776,7 @@ function App() {
         <Solution />
         <AiobsSection />
         <HowItWorks />
+        <PromptEnhancement />
         <Developer />
         <Features />
         <JsonTrace />
