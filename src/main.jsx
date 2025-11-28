@@ -9,6 +9,7 @@ import Playground from './pages/Playground.jsx'
 import Integrations from './pages/Integrations.jsx'
 import ApiKeys from './pages/ApiKeys.jsx'
 import AuthCallback from './pages/AuthCallback.jsx'
+import Enterprise from './pages/Enterprise.jsx'
 
 // ScrollToTop component - scrolls to top on route change
 function ScrollToTop() {
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/integrations" element={<Integrations />} />
         <Route path="/api-keys" element={<ApiKeys />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/enterprise" element={<Enterprise />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

@@ -3,7 +3,7 @@
 
 const API_URL = import.meta.env.PROD 
   ? 'https://shepherd-api-48963996968.us-central1.run.app'
-  : 'http://localhost:8000';
+  : 'https://shepherd-api-48963996968.us-central1.run.app';
 
 const api = {
   // ========================================
@@ -204,6 +204,115 @@ const api = {
         throw new Error('Not authenticated');
       }
       throw new Error('Failed to fetch usage');
+    }
+    
+    return response.json();
+  },
+  
+  // ========================================
+  // Razorpay Subscriptions
+  // ========================================
+  
+  async createSubscriptionOrder({ clientId, amount, planId, billingDetails }) {
+    const response = await fetch(`${API_URL}/v1/subscriptions/create`, {
+      method: 'POST',
+      headers: {
+        ...this.headers(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        client_id: clientId,
+        amount: amount,
+        plan_id: planId,
+        billing_details: billingDetails
+      })
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.clearSession();
+        throw new Error('Not authenticated');
+      }
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.detail || 'Failed to create subscription');
+    }
+    
+    return response.json();
+  },
+  
+  async verifySubscription({ razorpay_payment_id, razorpay_subscription_id, razorpay_signature }) {
+    const response = await fetch(`${API_URL}/v1/subscriptions/verify`, {
+      method: 'POST',
+      headers: {
+        ...this.headers(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        razorpay_payment_id,
+        razorpay_subscription_id,
+        razorpay_signature
+      })
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.clearSession();
+        throw new Error('Not authenticated');
+      }
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.detail || 'Payment verification failed');
+    }
+    
+    return response.json();
+  },
+  
+  async getSubscription() {
+    const response = await fetch(`${API_URL}/v1/subscriptions/current`, {
+      headers: this.headers()
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.clearSession();
+        throw new Error('Not authenticated');
+      }
+      if (response.status === 404) {
+        return null; // No active subscription
+      }
+      throw new Error('Failed to fetch subscription');
+    }
+    
+    return response.json();
+  },
+  
+  async cancelSubscription() {
+    const response = await fetch(`${API_URL}/v1/subscriptions/current/cancel`, {
+      method: 'POST',
+      headers: this.headers()
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.clearSession();
+        throw new Error('Not authenticated');
+      }
+      throw new Error('Failed to cancel subscription');
+    }
+    
+    return response.json();
+  },
+  
+  async getBillingHistory() {
+    const response = await fetch(`${API_URL}/v1/billing/history`, {
+      headers: this.headers()
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        this.clearSession();
+        throw new Error('Not authenticated');
+      }
+      throw new Error('Failed to fetch billing history');
     }
     
     return response.json();
