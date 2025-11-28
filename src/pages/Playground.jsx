@@ -42,9 +42,11 @@ import {
   Key,
   Loader2,
   Check,
-  CloudOff
+  CloudOff,
+  Wand2
 } from 'lucide-react'
 import './Playground.css'
+import EnhancePrompts from '../components/EnhancePrompts'
 
 // Animation variants
 const fadeInUp = {
@@ -2693,6 +2695,13 @@ export default function Playground() {
                 <LineChart size={14} />
                 <span>Timeline</span>
               </button>
+              <button
+                className={`view-toggle__btn ${viewMode === 'enhance' ? 'view-toggle__btn--active' : ''}`}
+                onClick={() => setViewMode('enhance')}
+              >
+                <Wand2 size={14} />
+                <span>Enhance</span>
+              </button>
             </div>
             <button className="playground-btn playground-btn--ghost" onClick={handleClearAll}>
               <Trash2 size={14} />
@@ -2765,6 +2774,12 @@ export default function Playground() {
                           isAggregated={true} 
                           sessions={sessions}
                         />
+                      ) : viewMode === 'enhance' ? (
+                        <EnhancePrompts 
+                          data={{}} 
+                          isAggregated={true} 
+                          sessions={sessions}
+                        />
                       ) : (
                         <Analytics 
                           data={{}} 
@@ -2783,6 +2798,8 @@ export default function Playground() {
                     <div className="playground-viewer">
                       {viewMode === 'timeline' ? (
                         <Timeline data={currentData} />
+                      ) : viewMode === 'enhance' ? (
+                        <EnhancePrompts data={currentData} />
                       ) : viewMode === 'analytics' ? (
                         <Analytics data={currentData} />
                       ) : viewMode === 'tree' && hasTraceTree ? (
