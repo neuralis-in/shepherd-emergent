@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
@@ -17,7 +17,9 @@ import {
   MessageSquare,
   Send,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  ChevronDown,
+  Globe
 } from 'lucide-react'
 import './Pricing.css'
 
@@ -34,11 +36,33 @@ const staggerContainer = {
   }
 }
 
+const currencies = [
+  { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸', region: 'US' },
+  { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺', region: 'EU' },
+  { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧', region: 'GB' },
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳', region: 'IN' },
+  { code: 'JPY', symbol: '¥', name: 'Japanese Yen', flag: '🇯🇵', region: 'JP' },
+  { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺', region: 'AU' },
+  { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦', region: 'CA' },
+  { code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', flag: '🇸🇬', region: 'SG' },
+]
+
+// Map country codes to currencies
+const regionToCurrency = {
+  US: 'USD', CA: 'CAD', MX: 'USD',
+  GB: 'GBP', UK: 'GBP',
+  DE: 'EUR', FR: 'EUR', IT: 'EUR', ES: 'EUR', NL: 'EUR', BE: 'EUR', AT: 'EUR', PT: 'EUR', IE: 'EUR', FI: 'EUR', GR: 'EUR',
+  IN: 'INR',
+  JP: 'JPY',
+  AU: 'AUD', NZ: 'AUD',
+  SG: 'SGD',
+}
+
 const plans = [
   {
     name: 'Free',
     icon: <Zap size={24} />,
-    price: '$0',
+    basePrice: 0,
     period: 'forever',
     description: 'Perfect for developers exploring AI agent observability.',
     features: [
@@ -51,13 +75,14 @@ const plans = [
       'OpenAI & Gemini support',
     ],
     cta: 'Get Started Free',
-    ctaLink: 'https://github.com/neuralis-in/aiobs',
+    ctaLink: '/api-keys',
+    isInternal: true,
     highlighted: false,
   },
   {
     name: 'Enterprise',
     icon: <Building2 size={24} />,
-    price: 'Custom',
+    basePrice: null, // Custom pricing
     period: 'contact us',
     description: 'For teams shipping production AI agents at scale.',
     features: [
@@ -109,7 +134,14 @@ function PricingHeader() {
   )
 }
 
-function PricingCard({ plan, onContactClick }) {
+function PricingCard({ plan, onContactClick, selectedCurrency }) {
+  const currency = currencies.find(c => c.code === selectedCurrency) || currencies[0]
+  
+  const formatPrice = (basePrice) => {
+    if (basePrice === null) return 'Custom'
+    return `${currency.symbol}${basePrice}`
+  }
+
   return (
     <motion.div 
       className={`pricing-card ${plan.highlighted ? 'pricing-card--highlighted' : ''}`}
@@ -128,7 +160,7 @@ function PricingCard({ plan, onContactClick }) {
       </div>
 
       <div className="pricing-card__price">
-        <span className="pricing-card__amount">{plan.price}</span>
+        <span className="pricing-card__amount">{formatPrice(plan.basePrice)}</span>
         <span className="pricing-card__period">/{plan.period}</span>
       </div>
 
@@ -159,6 +191,14 @@ function PricingCard({ plan, onContactClick }) {
             {plan.cta}
             <ArrowRight size={16} />
           </button>
+        ) : plan.isInternal ? (
+          <Link 
+            to={plan.ctaLink}
+            className={`btn ${plan.highlighted ? 'btn--primary' : 'btn--secondary'} btn--full`}
+          >
+            {plan.cta}
+            <ArrowRight size={16} />
+          </Link>
         ) : (
           <a 
             href={plan.ctaLink}
@@ -433,11 +473,117 @@ function FAQ() {
   )
 }
 
+function CurrencySelector({ selectedCurrency, onCurrencyChange }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const currentCurrency = currencies.find(c => c.code === selectedCurrency) || currencies[0]
+
+  return (
+    <motion.div 
+      className="currency-selector"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+    >
+      <div className="currency-selector__label">
+        <Globe size={14} />
+        <span>View prices in:</span>
+      </div>
+      
+      <div className="currency-selector__dropdown-wrapper">
+        <button 
+          className="currency-selector__trigger"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="currency-selector__flag">{currentCurrency.flag}</span>
+          <span className="currency-selector__code">{currentCurrency.code}</span>
+          <span className="currency-selector__symbol">({currentCurrency.symbol})</span>
+          <ChevronDown size={14} className={`currency-selector__arrow ${isOpen ? 'open' : ''}`} />
+        </button>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div 
+              className="currency-selector__dropdown"
+              initial={{ opacity: 0, y: -8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.96 }}
+              transition={{ duration: 0.15 }}
+            >
+              {currencies.map(c => (
+                <button
+                  key={c.code}
+                  className={`currency-selector__option ${selectedCurrency === c.code ? 'active' : ''}`}
+                  onClick={() => {
+                    onCurrencyChange(c.code)
+                    setIsOpen(false)
+                  }}
+                >
+                  <span className="currency-selector__option-flag">{c.flag}</span>
+                  <span className="currency-selector__option-code">{c.code}</span>
+                  <span className="currency-selector__option-name">{c.name}</span>
+                  <span className="currency-selector__option-symbol">{c.symbol}</span>
+                  {selectedCurrency === c.code && (
+                    <Check size={14} className="currency-selector__option-check" />
+                  )}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function Pricing() {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
+  const [selectedCurrency, setSelectedCurrency] = useState('USD')
+
+  useEffect(() => {
+    // Auto-detect user's region and set currency
+    const detectRegion = async () => {
+      try {
+        // Try to get timezone-based country
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+        const timezoneToCountry = {
+          'Asia/Kolkata': 'IN',
+          'Asia/Calcutta': 'IN',
+          'Europe/London': 'GB',
+          'Europe/Paris': 'FR',
+          'Europe/Berlin': 'DE',
+          'Europe/Madrid': 'ES',
+          'Europe/Rome': 'IT',
+          'Europe/Amsterdam': 'NL',
+          'Asia/Tokyo': 'JP',
+          'Australia/Sydney': 'AU',
+          'Australia/Melbourne': 'AU',
+          'America/Toronto': 'CA',
+          'America/Vancouver': 'CA',
+          'Asia/Singapore': 'SG',
+          'America/New_York': 'US',
+          'America/Los_Angeles': 'US',
+          'America/Chicago': 'US',
+        }
+        
+        const country = timezoneToCountry[timezone]
+        if (country && regionToCurrency[country]) {
+          setSelectedCurrency(regionToCurrency[country])
+        }
+      } catch (error) {
+        // Fallback to USD if detection fails
+        console.warn('Could not detect region:', error)
+      }
+    }
+
+    detectRegion()
+  }, [])
 
   const handleContactClick = () => {
     setIsDemoModalOpen(true)
+  }
+
+  const handleCurrencyChange = (currency) => {
+    setSelectedCurrency(currency)
   }
 
   return (
@@ -459,6 +605,11 @@ export default function Pricing() {
             <motion.p className="text-lg pricing-hero__subtitle" variants={fadeInUp}>
               Start free, scale when you need to. No hidden fees.
             </motion.p>
+            
+            <CurrencySelector
+              selectedCurrency={selectedCurrency}
+              onCurrencyChange={handleCurrencyChange}
+            />
           </motion.div>
 
           <motion.div 
@@ -472,6 +623,7 @@ export default function Pricing() {
                 key={i} 
                 plan={plan} 
                 onContactClick={handleContactClick}
+                selectedCurrency={selectedCurrency}
               />
             ))}
           </motion.div>
