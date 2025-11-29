@@ -1,0 +1,371 @@
+/* ========================================
+   SESSION SIDEBAR
+   ======================================== */
+
+.session-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 88px;
+}
+
+.session-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 16px 16px 0 0;
+}
+
+.session-sidebar__header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.session-sidebar__header h3 svg {
+  color: var(--color-text-muted);
+}
+
+.session-sidebar__count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  background: var(--color-accent);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.session-sidebar__list {
+  padding: 8px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.session-sidebar__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 8px 4px;
+}
+
+.session-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  transition: all 150ms ease;
+}
+
+.session-sidebar__item:last-child {
+  margin-bottom: 0;
+}
+
+.session-sidebar__item-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.session-sidebar__item:not(.session-sidebar__item--active) .session-sidebar__item-content:hover {
+  background: var(--color-bg-subtle);
+}
+
+.session-sidebar__item--active {
+  background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+}
+
+.session-sidebar__item--active .session-sidebar__item-content {
+  cursor: default;
+}
+
+.session-sidebar__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.session-sidebar__item--active .session-sidebar__item-icon {
+  background: white;
+  border-color: #C7D2FE;
+  color: #6366F1;
+}
+
+.session-sidebar__item-icon--overview {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.session-sidebar__item--active .session-sidebar__item-icon--overview {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: white;
+}
+
+.session-sidebar__item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.session-sidebar__item-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-sidebar__item-meta {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-sidebar__item-date {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.session-sidebar__item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 150ms ease;
+}
+
+.session-sidebar__item:hover .session-sidebar__item-remove {
+  opacity: 1;
+}
+
+.session-sidebar__item-remove:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* Add Sessions Button */
+.session-sidebar__add {
+  padding: 8px;
+  border-top: 1px solid var(--color-border);
+  transition: all 150ms ease;
+  border-radius: 0 0 16px 16px;
+  background: white;
+}
+
+.session-sidebar__add--dragging {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.session-sidebar__add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-subtle);
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.session-sidebar__add-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.session-sidebar__add--dragging .session-sidebar__add-btn {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  border-style: solid;
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.session-sidebar__add-wrapper {
+  position: relative;
+}
+
+.session-sidebar__add-chevron {
+  margin-left: auto;
+  transition: transform 150ms ease;
+}
+
+.session-sidebar__add-chevron--open {
+  transform: rotate(180deg);
+}
+
+.session-sidebar__add-menu {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.session-sidebar__add-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  text-align: left;
+}
+
+.session-sidebar__add-menu-item:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-subtle);
+}
+
+.session-sidebar__add-menu-gcp-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .session-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .session-sidebar__list {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .session-sidebar {
+    border-radius: 12px;
+  }
+
+  .session-sidebar__header {
+    padding: 12px;
+  }
+
+  .session-sidebar__header h3 {
+    font-size: 0.8125rem;
+  }
+
+  .session-sidebar__list {
+    padding: 6px;
+    max-height: 180px;
+  }
+
+  .session-sidebar__item {
+    padding: 3px;
+    margin-bottom: 3px;
+  }
+
+  .session-sidebar__item-content {
+    padding: 6px;
+    gap: 8px;
+  }
+
+  .session-sidebar__item-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .session-sidebar__item-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .session-sidebar__item-name {
+    font-size: 0.75rem;
+  }
+
+  .session-sidebar__item-meta {
+    font-size: 0.625rem;
+  }
+
+  .session-sidebar__item-remove {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+  }
+
+  .session-sidebar__add {
+    padding: 6px;
+  }
+
+  .session-sidebar__add-btn {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .session-sidebar__list {
+    max-height: 160px;
+  }
+
+  .session-sidebar__item-date {
+    display: none;
+  }
+
+  .session-sidebar__add-btn {
+    padding: 8px 10px;
+    font-size: 0.6875rem;
+  }
+}
+
