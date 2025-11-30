@@ -8,9 +8,12 @@
   background: white;
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  height: fit-content;
   position: sticky;
   top: 88px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .session-sidebar__header {
@@ -48,7 +51,8 @@
 
 .session-sidebar__list {
   padding: 8px;
-  max-height: calc(100vh - 200px);
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 
@@ -284,10 +288,12 @@
   .session-sidebar {
     width: 100%;
     position: static;
+    max-height: none;
   }
 
   .session-sidebar__list {
     max-height: 200px;
+    flex: none;
   }
 }
 

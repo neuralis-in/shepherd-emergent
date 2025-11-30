@@ -27,6 +27,8 @@ import {
   UploadZone,
   GCPConnectionModal,
   SessionSidebar,
+  PlaygroundFilters,
+  filterSessions,
   validateObservabilityJson
 } from '../components/playground'
 
@@ -42,11 +44,17 @@ export default function Playground() {
   const [isLoadingSample, setIsLoadingSample] = useState(false)
   const [validationError, setValidationError] = useState(null)
   const [isGCPModalOpen, setIsGCPModalOpen] = useState(false)
+  const [activeFilters, setActiveFilters] = useState({})
+
+  // Apply filters to sessions
+  const filteredSessions = useMemo(() => {
+    return filterSessions(sessions, activeFilters)
+  }, [sessions, activeFilters])
 
   const selectedSession = useMemo(() => {
     if (selectedSessionId === null) return null
-    return sessions.find(s => s.id === selectedSessionId)
-  }, [sessions, selectedSessionId])
+    return filteredSessions.find(s => s.id === selectedSessionId)
+  }, [filteredSessions, selectedSessionId])
 
   const currentData = selectedSession?.data || null
 
@@ -158,7 +166,8 @@ export default function Playground() {
   }
 
   const hasData = sessions.length > 0
-  const isOverviewMode = selectedSessionId === null && hasData
+  const hasFilteredData = filteredSessions.length > 0
+  const isOverviewMode = selectedSessionId === null && hasFilteredData
   const hasTraceTree = currentData?.trace_tree && currentData.trace_tree.length > 0
   const hasEvents = (currentData?.events && currentData.events.length > 0) || (currentData?.function_events && currentData.function_events.length > 0)
   const session = currentData?.sessions?.[0]
@@ -221,7 +230,7 @@ export default function Playground() {
             <h1>Playground</h1>
             <span className="playground-header__subtitle">
               {isOverviewMode 
-                ? `Analyzing ${sessions.length} session${sessions.length > 1 ? 's' : ''}`
+                ? `Analyzing ${filteredSessions.length} session${filteredSessions.length > 1 ? 's' : ''}${filteredSessions.length !== sessions.length ? ` (${sessions.length} total)` : ''}`
                 : 'Visualize LLM Observability Data'
               }
             </span>
@@ -304,17 +313,27 @@ export default function Playground() {
           </div>
         ) : (
           <div className="playground-layout">
-            {/* Session Sidebar */}
-            <SessionSidebar
-              sessions={sessions}
-              selectedSession={selectedSessionId}
-              onSelectSession={setSelectedSessionId}
-              onRemoveSession={handleRemoveSession}
-              onUpload={handleUpload}
-              isDragging={isDragging}
-              setIsDragging={setIsDragging}
-              onOpenGCPModal={() => setIsGCPModalOpen(true)}
-            />
+            {/* Filters and Session Sidebar */}
+            <div className="playground-sidebar-wrapper">
+              {/* Filters */}
+              <PlaygroundFilters
+                sessions={sessions}
+                activeFilters={activeFilters}
+                onFilterChange={setActiveFilters}
+              />
+              
+              {/* Session Sidebar */}
+              <SessionSidebar
+                sessions={filteredSessions}
+                selectedSession={selectedSessionId}
+                onSelectSession={setSelectedSessionId}
+                onRemoveSession={handleRemoveSession}
+                onUpload={handleUpload}
+                isDragging={isDragging}
+                setIsDragging={setIsDragging}
+                onOpenGCPModal={() => setIsGCPModalOpen(true)}
+              />
+            </div>
 
             {/* Main Content */}
             <div className="playground-content-area">
@@ -332,7 +351,7 @@ export default function Playground() {
                           <Files size={20} />
                           All Sessions Overview
                         </h2>
-                        <p>Aggregated {viewMode === 'timeline' ? 'timeline' : 'analytics'} across {sessions.length} uploaded session{sessions.length > 1 ? 's' : ''}</p>
+                        <p>Aggregated {viewMode === 'timeline' ? 'timeline' : 'analytics'} across {filteredSessions.length} uploaded session{filteredSessions.length > 1 ? 's' : ''}{filteredSessions.length !== sessions.length ? ` (filtered from ${sessions.length})` : ''}</p>
                       </div>
                     </div>
 
@@ -341,23 +360,34 @@ export default function Playground() {
                         <Timeline 
                           data={{}} 
                           isAggregated={true} 
-                          sessions={sessions}
+                          sessions={filteredSessions}
                         />
                       ) : viewMode === 'enhance' ? (
                         <EnhancePrompts 
                           data={{}} 
                           isAggregated={true} 
-                          sessions={sessions}
+                          sessions={filteredSessions}
                         />
                       ) : (
                         <Analytics 
                           data={{}} 
                           isAggregated={true} 
-                          sessions={sessions}
+                          sessions={filteredSessions}
                         />
                       )}
                     </div>
                   </>
+                ) : !hasFilteredData ? (
+                  <div className="playground-empty playground-empty--filtered">
+                    <AlertCircle size={24} />
+                    <p>No sessions match the current filters.</p>
+                    <button 
+                      className="playground-btn playground-btn--ghost"
+                      onClick={() => setActiveFilters({})}
+                    >
+                      Clear all filters
+                    </button>
+                  </div>
                 ) : (
                   <>
                     {/* Single Session View */}
