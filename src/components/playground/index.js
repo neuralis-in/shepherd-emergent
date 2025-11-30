@@ -24,6 +24,7 @@ export { default as UploadZone } from './UploadZone'
 export { default as GCPConnectionModal } from './GCPConnectionModal'
 export { default as SessionSidebar } from './SessionSidebar'
 export { default as PlaygroundFilters, filterSessions } from './PlaygroundFilters'
+export { default as SearchBar } from './SearchBar'
 
 // Re-export EnhancePrompts from parent components folder
 // (kept separate as it's a more general-purpose component)

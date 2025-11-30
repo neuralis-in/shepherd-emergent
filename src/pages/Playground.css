@@ -140,6 +140,17 @@
   color: var(--color-text);
 }
 
+/* Search badge in trace tree header */
+.trace-tree__search-badge {
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
 /* ========================================
    UPLOAD ZONE
    ======================================== */

@@ -28,6 +28,7 @@ import {
   GCPConnectionModal,
   SessionSidebar,
   PlaygroundFilters,
+  SearchBar,
   filterSessions,
   validateObservabilityJson
 } from '../components/playground'
@@ -45,6 +46,7 @@ export default function Playground() {
   const [validationError, setValidationError] = useState(null)
   const [isGCPModalOpen, setIsGCPModalOpen] = useState(false)
   const [activeFilters, setActiveFilters] = useState({})
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Apply filters to sessions
   const filteredSessions = useMemo(() => {
@@ -57,6 +59,86 @@ export default function Playground() {
   }, [filteredSessions, selectedSessionId])
 
   const currentData = selectedSession?.data || null
+
+  // Search through traces - searches in prompts, responses, model names, API names
+  const searchTraces = useCallback((traces, query) => {
+    if (!query.trim() || !traces) return traces
+    const lowerQuery = query.toLowerCase()
+    
+    const searchInNode = (node) => {
+      // Search in API name
+      if (node.api?.toLowerCase().includes(lowerQuery)) return true
+      // Search in provider
+      if (node.provider?.toLowerCase().includes(lowerQuery)) return true
+      // Search in model name
+      if (node.request?.model?.toLowerCase().includes(lowerQuery)) return true
+      // Search in messages (OpenAI format)
+      if (node.request?.messages?.some(m => m.content?.toLowerCase().includes(lowerQuery))) return true
+      // Search in contents (Gemini format)
+      if (node.request?.contents?.toLowerCase().includes(lowerQuery)) return true
+      // Search in input (embeddings)
+      if (node.request?.input) {
+        const input = Array.isArray(node.request.input) ? node.request.input.join(' ') : node.request.input
+        if (input.toLowerCase().includes(lowerQuery)) return true
+      }
+      // Search in response text
+      if (node.response?.text?.toLowerCase().includes(lowerQuery)) return true
+      // Search in function name
+      if (node.name?.toLowerCase().includes(lowerQuery)) return true
+      // Search in error
+      if (typeof node.error === 'string' && node.error.toLowerCase().includes(lowerQuery)) return true
+      // Search in result
+      if (typeof node.result === 'string' && node.result.toLowerCase().includes(lowerQuery)) return true
+      return false
+    }
+
+    const filterTraceTree = (nodes) => {
+      return nodes.filter(node => {
+        const nodeMatches = searchInNode(node)
+        const hasMatchingChildren = node.children && filterTraceTree(node.children).length > 0
+        return nodeMatches || hasMatchingChildren
+      }).map(node => ({
+        ...node,
+        children: node.children ? filterTraceTree(node.children) : []
+      }))
+    }
+
+    return filterTraceTree(traces)
+  }, [])
+
+  // Get filtered data based on search query
+  const filteredCurrentData = useMemo(() => {
+    if (!currentData || !searchQuery.trim()) return currentData
+    
+    return {
+      ...currentData,
+      trace_tree: searchTraces(currentData.trace_tree, searchQuery),
+      events: currentData.events?.filter(event => {
+        const lowerQuery = searchQuery.toLowerCase()
+        if (event.api?.toLowerCase().includes(lowerQuery)) return true
+        if (event.provider?.toLowerCase().includes(lowerQuery)) return true
+        if (event.request?.model?.toLowerCase().includes(lowerQuery)) return true
+        if (event.request?.messages?.some(m => m.content?.toLowerCase().includes(lowerQuery))) return true
+        if (event.response?.text?.toLowerCase().includes(lowerQuery)) return true
+        return false
+      }),
+      function_events: currentData.function_events?.filter(event => {
+        const lowerQuery = searchQuery.toLowerCase()
+        if (event.name?.toLowerCase().includes(lowerQuery)) return true
+        if (typeof event.result === 'string' && event.result.toLowerCase().includes(lowerQuery)) return true
+        return false
+      })
+    }
+  }, [currentData, searchQuery, searchTraces])
+
+  // Count search results
+  const searchResultsCount = useMemo(() => {
+    if (!searchQuery.trim() || !filteredCurrentData) return null
+    const traceCount = filteredCurrentData.trace_tree?.length || 0
+    const eventCount = filteredCurrentData.events?.length || 0
+    const funcCount = filteredCurrentData.function_events?.length || 0
+    return traceCount + eventCount + funcCount
+  }, [searchQuery, filteredCurrentData])
 
   const handleUpload = useCallback((file) => {
     // Only accept JSON files
@@ -168,9 +250,10 @@ export default function Playground() {
   const hasData = sessions.length > 0
   const hasFilteredData = filteredSessions.length > 0
   const isOverviewMode = selectedSessionId === null && hasFilteredData
-  const hasTraceTree = currentData?.trace_tree && currentData.trace_tree.length > 0
-  const hasEvents = (currentData?.events && currentData.events.length > 0) || (currentData?.function_events && currentData.function_events.length > 0)
+  const hasTraceTree = filteredCurrentData?.trace_tree && filteredCurrentData.trace_tree.length > 0
+  const hasEvents = (filteredCurrentData?.events && filteredCurrentData.events.length > 0) || (filteredCurrentData?.function_events && filteredCurrentData.function_events.length > 0)
   const session = currentData?.sessions?.[0]
+  const displayData = filteredCurrentData || currentData
 
   return (
     <div className="playground">
@@ -238,6 +321,15 @@ export default function Playground() {
         </div>
         {hasData && (
           <div className="playground-header__right">
+            {/* Search Bar - only show on tree, list, and timeline views */}
+            {(viewMode === 'tree' || viewMode === 'list' || viewMode === 'timeline') && (
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                resultsCount={searchResultsCount}
+              />
+            )}
+
             <div className="playground-header__view-toggle">
               {!isOverviewMode && (
                 <>
@@ -407,44 +499,49 @@ export default function Playground() {
                             <h3>
                               <Layers size={16} />
                               Trace Tree
+                              {searchQuery && (
+                                <span className="trace-tree__search-badge">
+                                  Filtered
+                                </span>
+                              )}
                             </h3>
                             <span className="trace-tree__count">
-                              {currentData.trace_tree.length} root {currentData.trace_tree.length === 1 ? 'trace' : 'traces'}
+                              {displayData.trace_tree.length} root {displayData.trace_tree.length === 1 ? 'trace' : 'traces'}
                             </span>
                           </div>
                           <div className="trace-tree__body">
-                            {currentData.trace_tree.map((trace, i) => (
-                              <TreeNode key={trace.span_id || i} node={trace} index={i} />
+                            {displayData.trace_tree.map((trace, i) => (
+                              <TreeNode key={trace.span_id || i} node={trace} index={i} searchQuery={searchQuery} />
                             ))}
                           </div>
                         </div>
                       ) : viewMode === 'list' && hasEvents ? (
                         <div className="events-list">
-                          {currentData.events && currentData.events.length > 0 && (
+                          {displayData.events && displayData.events.length > 0 && (
                             <div className="events-section">
                               <h3 className="events-section__title">
                                 <Cpu size={16} />
                                 Provider Events
-                                <span className="events-section__count">{currentData.events.length}</span>
+                                <span className="events-section__count">{displayData.events.length}</span>
                               </h3>
                               <div className="events-section__body">
-                                {currentData.events.map((event, i) => (
-                                  <EventCard key={event.span_id || i} event={event} index={i} />
+                                {displayData.events.map((event, i) => (
+                                  <EventCard key={event.span_id || i} event={event} index={i} searchQuery={searchQuery} />
                                 ))}
                               </div>
                             </div>
                           )}
 
-                          {currentData.function_events && currentData.function_events.length > 0 && (
+                          {displayData.function_events && displayData.function_events.length > 0 && (
                             <div className="events-section">
                               <h3 className="events-section__title">
                                 <Terminal size={16} />
                                 Function Events
-                                <span className="events-section__count">{currentData.function_events.length}</span>
+                                <span className="events-section__count">{displayData.function_events.length}</span>
                               </h3>
                               <div className="events-section__body">
-                                {currentData.function_events.map((event, i) => (
-                                  <EventCard key={event.span_id || i} event={event} index={i} />
+                                {displayData.function_events.map((event, i) => (
+                                  <EventCard key={event.span_id || i} event={event} index={i} searchQuery={searchQuery} />
                                 ))}
                               </div>
                             </div>
