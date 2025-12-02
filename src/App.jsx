@@ -39,10 +39,12 @@ import {
   TrendingUp,
   PieChart,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  LogIn
 } from 'lucide-react'
 import './App.css'
 import PromptEnhancement from './components/PromptEnhancement'
+import api, { signInWithGoogle } from './api'
 
 // Animation variants
 const fadeInUp = {
@@ -254,6 +256,44 @@ function BookDemoModal({ isOpen, onClose }) {
 // Header Component
 function Header({ onOpenModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState(null)
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+
+  useEffect(() => {
+    // Check if user is logged in
+    const checkAuth = async () => {
+      if (api.isLoggedIn()) {
+        setIsLoggedIn(true)
+        const cachedUser = api.getUser()
+        if (cachedUser) {
+          setUser(cachedUser)
+        }
+        // Try to refresh user data
+        try {
+          const userData = await api.getMe()
+          setUser(userData)
+        } catch (err) {
+          // If token is invalid, clear login state
+          if (err.message === 'Not authenticated') {
+            setIsLoggedIn(false)
+            setUser(null)
+          }
+        }
+      }
+    }
+    checkAuth()
+  }, [])
+
+  const handleLogin = async () => {
+    setIsLoggingIn(true)
+    try {
+      await signInWithGoogle()
+    } catch (err) {
+      console.error('Login failed:', err)
+      setIsLoggingIn(false)
+    }
+  }
 
   const closeMobileMenu = () => setMobileMenuOpen(false)
 
@@ -282,15 +322,34 @@ function Header({ onOpenModal }) {
           </div>
           <div className="header__nav-divider"></div>
           <div className="header__nav-actions">
-            <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer" className="header__icon-link" aria-label="GitHub">
-              <Github size={18} />
-            </a>
-            <Link to="/api-keys" className="header__link">
-              API Keys
-            </Link>
             <Link to="/playground" className="header__link header__link--highlight">
               Playground
             </Link>
+            {isLoggedIn ? (
+              <Link to="/api-keys" className="header__profile">
+                {user?.avatar_url ? (
+                  <img src={user.avatar_url} alt={user.name} className="header__avatar" />
+                ) : (
+                  <div className="header__avatar header__avatar--placeholder">
+                    <User size={14} />
+                  </div>
+                )}
+                <span>Profile</span>
+              </Link>
+            ) : (
+              <button 
+                className="header__login-btn"
+                onClick={handleLogin}
+                disabled={isLoggingIn}
+              >
+                {isLoggingIn ? (
+                  <Loader2 size={16} className="spinner" />
+                ) : (
+                  <LogIn size={16} />
+                )}
+                <span>{isLoggingIn ? 'Connecting...' : 'Login'}</span>
+              </button>
+            )}
           </div>
           <button className="btn btn--primary btn--sm" onClick={onOpenModal}>Book a Demo</button>
         </nav>
@@ -326,16 +385,29 @@ function Header({ onOpenModal }) {
               <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer" className="header__mobile-link">
                 Docs <ExternalLink size={14} />
               </a>
-              <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer" className="header__mobile-link">
-                <Github size={16} /> GitHub
-              </a>
               <div className="header__mobile-actions">
-                <Link to="/api-keys" className="btn btn--secondary btn--sm btn--full" onClick={closeMobileMenu}>
-                  API Keys
-                </Link>
                 <Link to="/playground" className="btn btn--highlight btn--sm btn--full" onClick={closeMobileMenu}>
                   Playground
                 </Link>
+                {isLoggedIn ? (
+                  <Link to="/api-keys" className="btn btn--secondary btn--sm btn--full header__mobile-profile" onClick={closeMobileMenu}>
+                    {user?.avatar_url ? (
+                      <img src={user.avatar_url} alt={user.name} className="header__avatar header__avatar--sm" />
+                    ) : (
+                      <User size={16} />
+                    )}
+                    Profile
+                  </Link>
+                ) : (
+                  <button 
+                    className="btn btn--secondary btn--sm btn--full"
+                    onClick={() => { closeMobileMenu(); handleLogin(); }}
+                    disabled={isLoggingIn}
+                  >
+                    {isLoggingIn ? <Loader2 size={16} className="spinner" /> : <LogIn size={16} />}
+                    {isLoggingIn ? 'Connecting...' : 'Login'}
+                  </button>
+                )}
                 <button className="btn btn--primary btn--sm btn--full" onClick={() => { closeMobileMenu(); onOpenModal(); }}>
                   Book a Demo
                 </button>
