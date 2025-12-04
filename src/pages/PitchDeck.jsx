@@ -29,7 +29,12 @@ import {
   Bot,
   HardDrive,
   Database,
-  Container
+  Container,
+  Terminal,
+  Code,
+  Crosshair,
+  X,
+  Check
 } from 'lucide-react'
 import './PitchDeck.css'
 
@@ -58,6 +63,7 @@ const slides = [
   { id: 'solution', title: 'Solution' },
   { id: 'how-it-works', title: 'How It Works' },
   { id: 'market', title: 'Market' },
+  { id: 'competitors', title: 'Competitors' },
   { id: 'business-model', title: 'Business Model' },
   { id: 'traction', title: 'Traction' },
   { id: 'partnerships', title: 'Partnerships' },
@@ -154,6 +160,10 @@ function CoverSlide() {
         <motion.p className="pitch-cover__tagline" variants={fadeInUp}>
           The observability layer for AI agents
         </motion.p>
+
+        <motion.p className="pitch-cover__hook" variants={fadeInUp}>
+          Shepherd traces AI agents—<span className="pitch-cover__hook-emphasis">so they don't fail.</span>
+        </motion.p>
         
         <motion.div className="pitch-cover__meta" variants={fadeInUp}>
           <span className="pitch-cover__category">AI Infrastructure • DevTools • B2B SaaS</span>
@@ -176,10 +186,6 @@ function CoverSlide() {
           </div>
         </motion.div>
       </div>
-      
-      <motion.div className="pitch-scroll-hint" variants={fadeInUp}>
-        <ArrowDown size={20} />
-      </motion.div>
     </motion.div>
   )
 }
@@ -617,6 +623,124 @@ function MarketSlide() {
   )
 }
 
+function CompetitorsSlide() {
+  const competitors = [
+    { name: 'LangSmith', focus: 'LLM Tracing', origin: 'LangChain ecosystem' },
+    { name: 'Arize AI', focus: 'ML Observability', origin: 'Model monitoring pivot' },
+    { name: 'Dynatrace', focus: 'APM Giant', origin: 'Traditional APM + AI bolt-on' },
+    { name: 'Portkey', focus: 'LLM Gateway', origin: 'API management focus' },
+    { name: 'Datadog', focus: 'APM Giant', origin: 'Traditional APM + AI bolt-on' },
+  ]
+
+  const differentiators = [
+    {
+      icon: <Bot size={24} />,
+      title: 'Agent-Native Architecture',
+      desc: 'Built ground-up for AI agents, not LLMs retrofitted',
+      us: true,
+      them: false
+    },
+    {
+      icon: <Terminal size={24} />,
+      title: 'shepherd-cli First',
+      desc: 'Engineer-oriented CLI workflow, not locked dashboards',
+      us: true,
+      them: false
+    },
+    {
+      icon: <Code size={24} />,
+      title: 'Open Source Core',
+      desc: 'aiobs SDK is MIT licensed, full transparency',
+      us: true,
+      them: false
+    },
+    {
+      icon: <HardDrive size={24} />,
+      title: 'Your Infrastructure',
+      desc: 'Data stays in your cloud, not vendor silos',
+      us: true,
+      them: false
+    },
+  ]
+
+  return (
+    <motion.div 
+      className="pitch-slide pitch-slide--competitors"
+      initial="hidden"
+      animate="visible"
+      variants={staggerContainer}
+    >
+      <div className="pitch-slide__content">
+        <motion.span className="pitch-slide__label" variants={fadeInUp}>Competitive Landscape</motion.span>
+        
+        <motion.h2 className="pitch-slide__title" variants={fadeInUp}>
+          They pivoted to agents. We started there.
+        </motion.h2>
+
+        <motion.div className="pitch-competitors-grid" variants={fadeInUp}>
+          <div className="pitch-competitors-players">
+            <h4>Existing Players</h4>
+            <div className="pitch-competitors-list">
+              {competitors.map((comp, i) => (
+                <motion.div 
+                  key={comp.name}
+                  className="pitch-competitor-card"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                >
+                  <span className="pitch-competitor-card__name">{comp.name}</span>
+                  <span className="pitch-competitor-card__focus">{comp.focus}</span>
+                  <span className="pitch-competitor-card__origin">{comp.origin}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pitch-competitors-wedge">
+            <h4>Our Wedge</h4>
+            <div className="pitch-wedge-list">
+              {differentiators.map((diff, i) => (
+                <motion.div 
+                  key={diff.title}
+                  className="pitch-wedge-item"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                >
+                  <div className="pitch-wedge-item__icon">{diff.icon}</div>
+                  <div className="pitch-wedge-item__content">
+                    <span className="pitch-wedge-item__title">{diff.title}</span>
+                    <span className="pitch-wedge-item__desc">{diff.desc}</span>
+                  </div>
+                  <div className="pitch-wedge-item__check">
+                    <Check size={16} />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div className="pitch-competitors-summary" variants={fadeInUp}>
+          <div className="pitch-competitors-summary__item">
+            <Crosshair size={20} />
+            <span><strong>Focus:</strong> Purpose-built for agentic workflows</span>
+          </div>
+          <div className="pitch-competitors-summary__item">
+            <Terminal size={20} />
+            <span><strong>Interface:</strong> CLI-first for engineers, not sales demos</span>
+          </div>
+          <div className="pitch-competitors-summary__item">
+            <Shield size={20} />
+            <span><strong>Control:</strong> Your data, your infrastructure</span>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
+
 function BusinessModelSlide() {
   return (
     <motion.div 
@@ -956,7 +1080,7 @@ function AskSlide() {
 
         <motion.div className="pitch-ask-details" variants={fadeInUp}>
           <div className="pitch-ask-amount">
-            <span className="pitch-ask-amount__value">$150K - $450K</span>
+            <span className="pitch-ask-amount__value">$400K</span>
             <span className="pitch-ask-amount__label">Pre-Seed Round</span>
           </div>
 
@@ -1051,6 +1175,7 @@ export default function PitchDeck() {
       case 'solution': return <SolutionSlide />
       case 'how-it-works': return <HowItWorksSlide />
       case 'market': return <MarketSlide />
+      case 'competitors': return <CompetitorsSlide />
       case 'business-model': return <BusinessModelSlide />
       case 'traction': return <TractionSlide />
       case 'partnerships': return <PartnershipsSlide />
