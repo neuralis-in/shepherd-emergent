@@ -27,6 +27,11 @@ export { default as SessionSidebar } from './SessionSidebar'
 export { default as PlaygroundFilters, filterSessions } from './PlaygroundFilters'
 export { default as SearchBar } from './SearchBar'
 
+// Evaluation Components
+export { default as EvaluationBadge, getEvalTypeInfo, EvalPill } from './EvaluationBadge'
+export { default as EvaluationsPanel, EvaluationCard, AssertionItem, LatencyStats } from './EvaluationsPanel'
+export { default as EvaluationsSummary, extractAllEvaluations } from './EvaluationsSummary'
+
 // Re-export EnhancePrompts from parent components folder
 // (kept separate as it's a more general-purpose component)
 // import { EnhancePrompts, EnhancePromptTraceItem } from '../EnhancePrompts'

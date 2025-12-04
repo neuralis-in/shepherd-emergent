@@ -11,6 +11,8 @@ import {
   Eye
 } from 'lucide-react'
 import { formatDuration } from './utils'
+import EvaluationBadge from './EvaluationBadge'
+import EvaluationsPanel from './EvaluationsPanel'
 import './TreeNode.css'
 
 /**
@@ -19,7 +21,8 @@ import './TreeNode.css'
 export function NodeDetails({ node, depth }) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const hasDetails = node.request || node.response || node.result || node.error
+  const hasEvaluations = node.evaluations && node.evaluations.length > 0
+  const hasDetails = node.request || node.response || node.result || node.error || hasEvaluations
 
   if (!hasDetails) return null
 
@@ -132,6 +135,11 @@ export function NodeDetails({ node, depth }) {
                 </pre>
               </div>
             )}
+
+            {/* Evaluations */}
+            {hasEvaluations && (
+              <EvaluationsPanel evaluations={node.evaluations} />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -145,6 +153,7 @@ export function NodeDetails({ node, depth }) {
 export default function TreeNode({ node, depth = 0, index = 0 }) {
   const [isExpanded, setIsExpanded] = useState(true)
   const hasChildren = node.children && node.children.length > 0
+  const hasEvaluations = node.evaluations && node.evaluations.length > 0
 
   const getNodeIcon = () => {
     if (node.event_type === 'function' || node.provider === 'function') {
@@ -205,6 +214,9 @@ export default function TreeNode({ node, depth = 0, index = 0 }) {
         </div>
 
         <div className="tree-node__meta">
+          {hasEvaluations && (
+            <EvaluationBadge evaluations={node.evaluations} compact />
+          )}
           {node.duration_ms && (
             <span className="tree-node__duration">
               <Clock size={12} />

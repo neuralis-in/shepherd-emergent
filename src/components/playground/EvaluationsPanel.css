@@ -1,0 +1,571 @@
+/* ========================================
+   EVALUATIONS PANEL - Full Details View
+   ======================================== */
+
+.evaluations-panel {
+  margin-top: 16px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
+}
+
+.evaluations-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.evaluations-panel__header h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.evaluations-panel__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.evaluations-panel__stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.evaluations-panel__stat--passed {
+  color: #059669;
+}
+
+.evaluations-panel__stat--failed {
+  color: #DC2626;
+}
+
+.evaluations-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ========================================
+   EVALUATION CARD - Individual Eval
+   ======================================== */
+
+.evaluation-card {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 150ms ease;
+}
+
+.evaluation-card:hover {
+  border-color: var(--color-text-muted);
+}
+
+.evaluation-card--failed {
+  border-left: 3px solid #DC2626;
+}
+
+.evaluation-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.evaluation-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.evaluation-card__icon--purple {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.evaluation-card__icon--blue {
+  background: #DBEAFE;
+  color: #2563EB;
+}
+
+.evaluation-card__icon--amber {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.evaluation-card__icon--red {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.evaluation-card__icon--teal {
+  background: #CCFBF1;
+  color: #0D9488;
+}
+
+.evaluation-card__icon--indigo {
+  background: #E0E7FF;
+  color: #4F46E5;
+}
+
+.evaluation-card__icon--gray {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
+.evaluation-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.evaluation-card__type {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.evaluation-card__feedback {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.evaluation-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.evaluation-card__score,
+.evaluation-card__latency {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  padding: 3px 8px;
+  background: var(--color-bg-subtle);
+  border-radius: 4px;
+}
+
+.evaluation-card__status {
+  display: flex;
+  align-items: center;
+}
+
+.evaluation-card__status--passed {
+  color: #10B981;
+}
+
+.evaluation-card__status--failed {
+  color: #EF4444;
+}
+
+.evaluation-card__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.evaluation-card__toggle:hover {
+  background: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.evaluation-card__body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.evaluation-card__section {
+  margin-top: 12px;
+}
+
+.evaluation-card__section h5 {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin: 0 0 8px 0;
+}
+
+.evaluation-card__analysis {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  padding: 10px 12px;
+  background: var(--color-bg-subtle);
+  border-radius: 6px;
+  margin: 0;
+}
+
+.evaluation-card__assertions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.evaluation-card__hallucinations {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.evaluation-card__pii-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  padding: 10px 12px;
+  background: var(--color-bg-subtle);
+  border-radius: 6px;
+}
+
+.evaluation-card__pii-info strong {
+  color: var(--color-text);
+}
+
+.evaluation-card__human-feedback {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  padding: 10px 12px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 6px;
+  margin: 0;
+}
+
+.evaluation-card__metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.evaluation-card__metadata code {
+  font-family: var(--font-mono);
+  background: var(--color-bg-subtle);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ========================================
+   ASSERTION ITEM
+   ======================================== */
+
+.assertion-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--color-bg-subtle);
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+}
+
+.assertion-item--passed {
+  border-left-color: #10B981;
+}
+
+.assertion-item--failed {
+  border-left-color: #EF4444;
+  background: #FEF2F2;
+}
+
+.assertion-item__status {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.assertion-item--passed .assertion-item__status {
+  color: #10B981;
+}
+
+.assertion-item--failed .assertion-item__status {
+  color: #EF4444;
+}
+
+.assertion-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.assertion-item__name {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.assertion-item__message {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.assertion-item__details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.assertion-item__detail {
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+}
+
+.assertion-item__detail strong {
+  color: var(--color-text-secondary);
+}
+
+/* ========================================
+   HALLUCINATION ITEM
+   ======================================== */
+
+.hallucination-item {
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  border-left: 3px solid;
+}
+
+.hallucination-item--minor {
+  border-left-color: #F59E0B;
+}
+
+.hallucination-item--major {
+  border-left-color: #EF4444;
+}
+
+.hallucination-item--critical {
+  border-left-color: #DC2626;
+  background: #FEF2F2;
+}
+
+.hallucination-item__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.hallucination-item__index {
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.hallucination-item__severity {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.hallucination-item__severity--minor {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.hallucination-item__severity--major {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.hallucination-item__severity--critical {
+  background: #991B1B;
+  color: white;
+}
+
+.hallucination-item__claim {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin: 0 0 6px 0;
+}
+
+.hallucination-item__reason {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ========================================
+   LATENCY STATS
+   ======================================== */
+
+.latency-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.latency-stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--color-bg-subtle);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.latency-stats__label {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.latency-stats__value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .evaluations-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .evaluation-card__header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .evaluation-card__info {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .evaluation-card__meta {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .latency-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .evaluations-panel {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .evaluations-panel__header h4 {
+    font-size: 0.6875rem;
+  }
+
+  .evaluations-panel__stat {
+    font-size: 0.625rem;
+  }
+
+  .evaluation-card__header {
+    padding: 10px 12px;
+  }
+
+  .evaluation-card__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .evaluation-card__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .evaluation-card__type {
+    font-size: 0.75rem;
+  }
+
+  .evaluation-card__feedback {
+    font-size: 0.625rem;
+  }
+
+  .evaluation-card__score,
+  .evaluation-card__latency {
+    font-size: 0.625rem;
+    padding: 2px 6px;
+  }
+
+  .evaluation-card__body {
+    padding: 0 12px 12px;
+  }
+
+  .evaluation-card__section h5 {
+    font-size: 0.5625rem;
+  }
+
+  .latency-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .assertion-item {
+    padding: 6px 8px;
+  }
+
+  .assertion-item__name {
+    font-size: 0.625rem;
+  }
+
+  .hallucination-item {
+    padding: 8px 10px;
+  }
+}
+

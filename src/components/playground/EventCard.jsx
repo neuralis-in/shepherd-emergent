@@ -11,6 +11,8 @@ import {
 } from 'lucide-react'
 import { fadeInUp } from './constants'
 import { formatDuration } from './utils'
+import EvaluationBadge from './EvaluationBadge'
+import EvaluationsPanel from './EvaluationsPanel'
 import './EventCard.css'
 
 /**
@@ -23,6 +25,8 @@ export default function EventCard({ event, index }) {
     if (event.provider === 'function') return <Terminal size={16} />
     return <Cpu size={16} />
   }
+
+  const hasEvaluations = event.evaluations && event.evaluations.length > 0
 
   return (
     <motion.div
@@ -43,6 +47,9 @@ export default function EventCard({ event, index }) {
           )}
         </div>
         <div className="event-card__meta">
+          {hasEvaluations && (
+            <EvaluationBadge evaluations={event.evaluations} compact />
+          )}
           <span className="event-card__duration">
             <Clock size={12} />
             {formatDuration(event.duration_ms)}
@@ -102,6 +109,11 @@ export default function EventCard({ event, index }) {
               <div className="event-card__usage">
                 <span>Tokens: {event.response.usage.total_tokens || event.response.usage.total_token_count || 0}</span>
               </div>
+            )}
+
+            {/* Evaluations Panel */}
+            {hasEvaluations && (
+              <EvaluationsPanel evaluations={event.evaluations} />
             )}
           </motion.div>
         )}

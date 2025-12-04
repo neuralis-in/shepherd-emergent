@@ -1,0 +1,567 @@
+/* ========================================
+   EVALUATIONS SUMMARY - Overview Dashboard
+   ======================================== */
+
+.evaluations-summary {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.evaluations-summary--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px;
+  color: var(--color-text-muted);
+}
+
+.evaluations-summary--empty p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.evaluations-summary__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 20px 0;
+}
+
+.evaluations-summary__title svg {
+  color: #059669;
+}
+
+.evaluations-summary__section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ========================================
+   OVERVIEW STAT CARDS
+   ======================================== */
+
+.evaluations-summary__overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.eval-stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--color-bg-subtle);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  transition: all 200ms ease;
+}
+
+.eval-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.eval-stat-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.eval-stat-card--default .eval-stat-card__icon {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
+.eval-stat-card--success .eval-stat-card__icon {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.eval-stat-card--warning .eval-stat-card__icon {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.eval-stat-card--danger .eval-stat-card__icon {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.eval-stat-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.eval-stat-card__value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.eval-stat-card--success .eval-stat-card__value {
+  color: #059669;
+}
+
+.eval-stat-card--warning .eval-stat-card__value {
+  color: #D97706;
+}
+
+.eval-stat-card--danger .eval-stat-card__value {
+  color: #DC2626;
+}
+
+.eval-stat-card__label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.eval-stat-card__subvalue {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.eval-stat-card__trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.eval-stat-card__trend--up {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.eval-stat-card__trend--down {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* ========================================
+   EVAL TYPE BREAKDOWN
+   ======================================== */
+
+.evaluations-summary__breakdown {
+  margin-bottom: 24px;
+}
+
+.evaluations-summary__types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.eval-type-card {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 200ms ease;
+}
+
+.eval-type-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.eval-type-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.eval-type-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.eval-type-card__icon--purple {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.eval-type-card__icon--blue {
+  background: #DBEAFE;
+  color: #2563EB;
+}
+
+.eval-type-card__icon--amber {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.eval-type-card__icon--gray {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
+.eval-type-card__title {
+  flex: 1;
+  min-width: 0;
+}
+
+.eval-type-card__name {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.eval-type-card__count {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.eval-type-card__badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.eval-type-card__badge--success {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.eval-type-card__badge--warning {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.eval-type-card__badge--danger {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.eval-type-card__progress {
+  margin-bottom: 12px;
+}
+
+.eval-type-card__progress-bar {
+  height: 8px;
+  background: #FEE2E2;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.eval-type-card__progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 300ms ease;
+}
+
+.eval-type-card__progress-fill--passed {
+  background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
+}
+
+.eval-type-card__progress-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.eval-type-card__progress-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.eval-type-card__progress-label--passed {
+  color: #059669;
+}
+
+.eval-type-card__progress-label--failed {
+  color: #DC2626;
+}
+
+.eval-type-card__details {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eval-type-card__detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eval-type-card__detail--full {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.eval-type-card__detail-label {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+}
+
+.eval-type-card__detail-value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+}
+
+.eval-type-card__detail-value--success {
+  color: #059669;
+}
+
+.eval-type-card__detail-value--danger {
+  color: #DC2626;
+}
+
+.eval-type-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.eval-type-card__tag {
+  font-size: 0.5625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  background: #F3E8FF;
+  color: #7C3AED;
+  border-radius: 4px;
+}
+
+.eval-type-card__severity-breakdown {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.eval-type-card__severity {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.eval-type-card__severity--minor {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.eval-type-card__severity--major {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.eval-type-card__severity--critical {
+  background: #991B1B;
+  color: white;
+}
+
+.eval-type-card__latency-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+/* ========================================
+   ISSUES SUMMARY
+   ======================================== */
+
+.evaluations-summary__issues {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.evaluations-summary__issues .evaluations-summary__section-title {
+  color: #D97706;
+}
+
+.evaluations-summary__issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eval-issue-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.eval-issue-item strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.eval-issue-item--pii {
+  border-left: 3px solid #7C3AED;
+}
+
+.eval-issue-item--pii svg {
+  color: #7C3AED;
+}
+
+.eval-issue-item--hallucination {
+  border-left: 3px solid #D97706;
+}
+
+.eval-issue-item--hallucination svg {
+  color: #D97706;
+}
+
+.eval-issue-item--latency {
+  border-left: 3px solid #2563EB;
+}
+
+.eval-issue-item--latency svg {
+  color: #2563EB;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .evaluations-summary {
+    padding: 16px;
+  }
+  
+  .evaluations-summary__overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .eval-stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .eval-stat-card__icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .eval-stat-card__value {
+    font-size: 1.25rem;
+  }
+  
+  .evaluations-summary__types {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .evaluations-summary {
+    padding: 14px;
+    border-radius: 12px;
+  }
+  
+  .evaluations-summary__title {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+  
+  .evaluations-summary__overview {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .eval-stat-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 12px 10px;
+  }
+  
+  .eval-stat-card__icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .eval-stat-card__icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .eval-stat-card__value {
+    font-size: 1.125rem;
+  }
+  
+  .eval-stat-card__label {
+    font-size: 0.6875rem;
+  }
+  
+  .eval-stat-card__subvalue {
+    font-size: 0.625rem;
+  }
+  
+  .eval-type-card {
+    padding: 12px;
+  }
+  
+  .eval-type-card__icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .eval-type-card__name {
+    font-size: 0.875rem;
+  }
+  
+  .eval-type-card__latency-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .eval-issue-item {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+}
+

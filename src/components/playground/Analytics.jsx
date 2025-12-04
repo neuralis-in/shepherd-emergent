@@ -23,6 +23,7 @@ import {
   truncateString 
 } from './utils'
 import PromptCard from './PromptCard'
+import EvaluationsSummary from './EvaluationsSummary'
 import './Analytics.css'
 
 /**
@@ -154,6 +155,9 @@ export default function Analytics({ data, isAggregated = false, sessions = [] })
           <span>Showing aggregated analytics across <strong>{sessions.length} sessions</strong></span>
         </div>
       )}
+
+      {/* Evaluations Summary */}
+      <EvaluationsSummary data={data} isAggregated={isAggregated} sessions={sessions} />
 
       {/* Overview Stats - Full Width Row */}
       <div className="analytics-section analytics-section--full">
