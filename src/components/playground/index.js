@@ -31,6 +31,7 @@ export { default as SearchBar } from './SearchBar'
 export { default as EvaluationBadge, getEvalTypeInfo, EvalPill } from './EvaluationBadge'
 export { default as EvaluationsPanel, EvaluationCard, AssertionItem, LatencyStats } from './EvaluationsPanel'
 export { default as EvaluationsSummary, extractAllEvaluations } from './EvaluationsSummary'
+export { default as IssuesView } from './IssuesView'
 
 // Re-export EnhancePrompts from parent components folder
 // (kept separate as it's a more general-purpose component)

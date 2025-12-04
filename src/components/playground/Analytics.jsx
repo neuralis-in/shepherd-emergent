@@ -29,7 +29,7 @@ import './Analytics.css'
 /**
  * Analytics Component - Dashboard for analyzing LLM usage
  */
-export default function Analytics({ data, isAggregated = false, sessions = [] }) {
+export default function Analytics({ data, isAggregated = false, sessions = [], onNavigateToIssues }) {
   const [costProviderFilter, setCostProviderFilter] = useState('all')
   
   // Extract all LLM events from trace tree or use flat events
@@ -157,7 +157,7 @@ export default function Analytics({ data, isAggregated = false, sessions = [] })
       )}
 
       {/* Evaluations Summary */}
-      <EvaluationsSummary data={data} isAggregated={isAggregated} sessions={sessions} />
+      <EvaluationsSummary data={data} isAggregated={isAggregated} sessions={sessions} onNavigateToIssues={onNavigateToIssues} />
 
       {/* Overview Stats - Full Width Row */}
       <div className="analytics-section analytics-section--full">

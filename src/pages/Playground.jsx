@@ -12,7 +12,8 @@ import {
   LineChart,
   Wand2,
   Cpu,
-  Terminal
+  Terminal,
+  AlertTriangle
 } from 'lucide-react'
 import './Playground.css'
 
@@ -31,7 +32,8 @@ import {
   PlaygroundFilters,
   SearchBar,
   filterSessions,
-  validateObservabilityJson
+  validateObservabilityJson,
+  IssuesView
 } from '../components/playground'
 
 import EnhancePrompts from '../components/EnhancePrompts'
@@ -49,6 +51,7 @@ export default function Playground() {
   const [isYourTracesModalOpen, setIsYourTracesModalOpen] = useState(false)
   const [activeFilters, setActiveFilters] = useState({})
   const [searchQuery, setSearchQuery] = useState('')
+  const [issuesFilter, setIssuesFilter] = useState('all') // Filter for issues view
 
   // Apply filters to sessions
   const filteredSessions = useMemo(() => {
@@ -396,6 +399,13 @@ export default function Playground() {
                 <Wand2 size={14} />
                 <span>Enhance</span>
               </button>
+              <button
+                className={`view-toggle__btn ${viewMode === 'issues' ? 'view-toggle__btn--active' : ''}`}
+                onClick={() => setViewMode('issues')}
+              >
+                <AlertTriangle size={14} />
+                <span>Issues</span>
+              </button>
             </div>
             <button className="playground-btn playground-btn--ghost" onClick={handleClearAll}>
               <Trash2 size={14} />
@@ -486,11 +496,23 @@ export default function Playground() {
                           isAggregated={true} 
                           sessions={filteredSessions}
                         />
+                      ) : viewMode === 'issues' ? (
+                        <IssuesView
+                          data={{}}
+                          isAggregated={true}
+                          sessions={filteredSessions}
+                          initialFilter={issuesFilter}
+                          onBack={() => setViewMode('analytics')}
+                        />
                       ) : (
                         <Analytics 
                           data={{}} 
                           isAggregated={true} 
                           sessions={filteredSessions}
+                          onNavigateToIssues={(filter) => {
+                            setIssuesFilter(filter)
+                            setViewMode('issues')
+                          }}
                         />
                       )}
                     </div>
@@ -517,8 +539,20 @@ export default function Playground() {
                         <Timeline data={currentData} />
                       ) : viewMode === 'enhance' ? (
                         <EnhancePrompts data={currentData} />
+                      ) : viewMode === 'issues' ? (
+                        <IssuesView
+                          data={currentData}
+                          initialFilter={issuesFilter}
+                          onBack={() => setViewMode('analytics')}
+                        />
                       ) : viewMode === 'analytics' ? (
-                        <Analytics data={currentData} />
+                        <Analytics 
+                          data={currentData}
+                          onNavigateToIssues={(filter) => {
+                            setIssuesFilter(filter)
+                            setViewMode('issues')
+                          }}
+                        />
                       ) : viewMode === 'tree' && hasTraceTree ? (
                         <div className="trace-tree">
                           <div className="trace-tree__header">
