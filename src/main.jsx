@@ -15,6 +15,7 @@ import PilotAgreement from './pages/PilotAgreement.jsx'
 import Contact from './pages/Contact.jsx'
 import Privacy from './pages/Privacy.jsx'
 import Blog from './pages/Blog.jsx'
+import PitchDeck from './pages/PitchDeck.jsx'
 
 // ScrollToTop component - scrolls to top on route change
 function ScrollToTop() {
@@ -49,6 +50,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/self-healing-prompts" element={<Blog />} />
+        <Route path="/pitch-deck" element={<PitchDeck />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

@@ -445,6 +445,10 @@ function Hero({ onOpenModal }) {
               <span className="hero__ribbon-dot"></span>
               prompt-enhancer coming soon
             </span>
+            <a href="#cli" className="hero__cli-ribbon">
+              <Terminal size={12} />
+              <span>CLI coming soon</span>
+            </a>
             <h1 className="heading-xl hero__title">
               Shepherd traces AI agents<br />so they don't fail.
             </h1>
@@ -1668,6 +1672,242 @@ function Developer() {
   )
 }
 
+// CLI Preview Section - Coming Soon
+function CLIPreview() {
+  const [activeCommand, setActiveCommand] = useState(0)
+  const [isTyping, setIsTyping] = useState(true)
+  const [displayedOutput, setDisplayedOutput] = useState([])
+  
+  const commands = [
+    {
+      cmd: 'shepherd analyze trace.json',
+      output: [
+        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  📊 Session Analysis                         │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'info', text: '' },
+        { type: 'label', text: '  Session:', value: 'travel-agent-run-2847' },
+        { type: 'label', text: '  Duration:', value: '4.2s' },
+        { type: 'label', text: '  LLM Calls:', value: '6' },
+        { type: 'label', text: '  Tool Calls:', value: '3' },
+        { type: 'label', text: '  Tokens:', value: '2,847 ($0.0043)' },
+        { type: 'success', text: '  Status:', value: '✓ Success' },
+      ]
+    },
+    {
+      cmd: 'shepherd errors trace.json',
+      output: [
+        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🔍 Error Detection                          │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'info', text: '' },
+        { type: 'warning', text: '  ⚠ Warning:', value: 'High latency detected (3.2s)' },
+        { type: 'info', text: '    └─ chat.completions @ line 142' },
+        { type: 'info', text: '' },
+        { type: 'warning', text: '  ⚠ Warning:', value: 'Retry detected (2 attempts)' },
+        { type: 'info', text: '    └─ search_flights() @ line 89' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  No critical errors found' },
+      ]
+    },
+    {
+      cmd: 'shepherd assert trace.json --max-latency 5000',
+      output: [
+        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  ✅ CI/CD Assertions                         │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  ✓ max-latency:', value: '4200ms < 5000ms' },
+        { type: 'success', text: '  ✓ no-errors:', value: 'passed' },
+        { type: 'success', text: '  ✓ no-loops:', value: 'passed' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  All assertions passed! Exit code: 0' },
+      ]
+    }
+  ]
+
+  const features = [
+    { icon: <Terminal size={18} />, title: 'Local Analysis', desc: 'Analyze traces without leaving your terminal' },
+    { icon: <Play size={18} />, title: 'CI/CD Ready', desc: 'Assert conditions in your pipelines' },
+    { icon: <Search size={18} />, title: 'Quick Debugging', desc: 'Find errors and issues instantly' },
+    { icon: <Cloud size={18} />, title: 'Cloud Sync', desc: 'Upload traces to Shepherd cloud' },
+  ]
+
+  useEffect(() => {
+    const command = commands[activeCommand]
+    let outputIndex = 0
+    setDisplayedOutput([])
+    setIsTyping(true)
+
+    // Type command first, then show output
+    const outputTimer = setInterval(() => {
+      if (outputIndex < command.output.length) {
+        setDisplayedOutput(prev => [...prev, command.output[outputIndex]])
+        outputIndex++
+      } else {
+        setIsTyping(false)
+        clearInterval(outputTimer)
+      }
+    }, 120)
+
+    return () => clearInterval(outputTimer)
+  }, [activeCommand])
+
+  // Cycle through commands
+  useEffect(() => {
+    const cycleTimer = setInterval(() => {
+      setActiveCommand(prev => (prev + 1) % commands.length)
+    }, 6000)
+    return () => clearInterval(cycleTimer)
+  }, [])
+
+  return (
+    <section className="section section--subtle cli-preview" id="cli">
+      <div className="container">
+        <motion.div
+          className="cli-preview__content"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div className="cli-preview__header" variants={fadeInUp}>
+            <div className="cli-preview__badges">
+              <div className="cli-preview__badge cli-preview__badge--coming-soon">
+                <span className="cli-preview__badge-dot"></span>
+                Coming Soon
+              </div>
+              <div className="cli-preview__badge">
+                <Terminal size={14} />
+                CLI Tool
+              </div>
+            </div>
+            <h2 className="heading-lg">
+              Debug from your terminal.
+            </h2>
+            <p className="text-lg">
+              A powerful command-line interface for Shepherd — analyze traces, detect issues, 
+              and integrate with CI/CD pipelines without leaving your terminal.
+            </p>
+          </motion.div>
+
+          <motion.div className="cli-preview__demo" variants={scaleIn}>
+            <div className="cli-terminal">
+              <div className="cli-terminal__header">
+                <div className="cli-terminal__dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <span className="cli-terminal__title">Terminal — shepherd</span>
+                <div className="cli-terminal__tabs">
+                  {commands.map((c, i) => (
+                    <button
+                      key={i}
+                      className={`cli-terminal__tab ${activeCommand === i ? 'cli-terminal__tab--active' : ''}`}
+                      onClick={() => setActiveCommand(i)}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="cli-terminal__body">
+                <div className="cli-terminal__prompt">
+                  <span className="cli-terminal__user">~</span>
+                  <span className="cli-terminal__path"></span>
+                  <span className="cli-terminal__symbol">$</span>
+                  <motion.span 
+                    className="cli-terminal__command"
+                    key={activeCommand}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {commands[activeCommand].cmd}
+                  </motion.span>
+                  {isTyping && <span className="cli-terminal__cursor">▋</span>}
+                </div>
+                <div className="cli-terminal__output">
+                  <AnimatePresence mode="wait">
+                    {displayedOutput.map((line, i) => (
+                      <motion.div
+                        key={`${activeCommand}-${i}`}
+                        className={`cli-terminal__line cli-terminal__line--${line.type}`}
+                        initial={{ opacity: 0, x: -5 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.1 }}
+                      >
+                        {line.text}
+                        {line.value && <span className="cli-terminal__value">{line.value}</span>}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div className="cli-preview__features" variants={fadeInUp}>
+            {features.map((feature, i) => (
+              <div key={i} className="cli-preview__feature">
+                <div className="cli-preview__feature-icon">{feature.icon}</div>
+                <div className="cli-preview__feature-content">
+                  <h4>{feature.title}</h4>
+                  <p>{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.div className="cli-preview__commands" variants={fadeInUp}>
+            <h4 className="cli-preview__commands-title">Preview Commands</h4>
+            <div className="cli-preview__commands-grid">
+              <div className="cli-preview__cmd">
+                <code>shepherd analyze</code>
+                <span>Quick stats summary</span>
+              </div>
+              <div className="cli-preview__cmd">
+                <code>shepherd errors</code>
+                <span>Detect failures & issues</span>
+              </div>
+              <div className="cli-preview__cmd">
+                <code>shepherd assert</code>
+                <span>CI/CD assertions</span>
+              </div>
+              <div className="cli-preview__cmd">
+                <code>shepherd upload</code>
+                <span>Push to cloud</span>
+              </div>
+              <div className="cli-preview__cmd">
+                <code>shepherd watch</code>
+                <span>Auto-upload new traces</span>
+              </div>
+              <div className="cli-preview__cmd">
+                <code>shepherd enhance</code>
+                <span>Prompt suggestions</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div className="cli-preview__cta" variants={fadeInUp}>
+            <p className="cli-preview__cta-text">
+              Want early access to the CLI?
+            </p>
+            <a 
+              href="https://github.com/neuralis-in/aiobs" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn btn--secondary"
+            >
+              <Github size={16} />
+              Star on GitHub
+            </a>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // Features Section
 function Features() {
   const features = [
@@ -1864,6 +2104,7 @@ function App() {
         <HowItWorks />
         <PromptEnhancement />
         <Developer />
+        <CLIPreview />
         <Features />
         <JsonTrace />
         <WhyShepherd />
