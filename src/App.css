@@ -2183,6 +2183,15 @@
   animation: pulse 2s infinite;
 }
 
+.cli-preview__badge-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .cli-preview__header h2 {
   margin-bottom: var(--spacing-md);
 }

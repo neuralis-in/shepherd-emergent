@@ -40,7 +40,8 @@ import {
   PieChart,
   ChevronDown,
   ChevronRight,
-  LogIn
+  LogIn,
+  Target
 } from 'lucide-react'
 import './App.css'
 import PromptEnhancement from './components/PromptEnhancement'
@@ -445,9 +446,9 @@ function Hero({ onOpenModal }) {
               <span className="hero__ribbon-dot"></span>
               prompt-enhancer coming soon
             </span>
-            <a href="#cli" className="hero__cli-ribbon">
+            <a href="#shell" className="hero__cli-ribbon">
               <Terminal size={12} />
-              <span>CLI coming soon</span>
+              <span>Shepherd Shell</span>
             </a>
             <h1 className="heading-xl hero__title">
               Shepherd traces AI agents<br />so they don't fail.
@@ -1672,65 +1673,91 @@ function Developer() {
   )
 }
 
-// CLI Preview Section - Coming Soon
-function CLIPreview() {
+// Shepherd Shell Section - GDB-Style Debugger for AI Agents
+function ShepherdShell() {
   const [activeCommand, setActiveCommand] = useState(0)
   const [isTyping, setIsTyping] = useState(true)
   const [displayedOutput, setDisplayedOutput] = useState([])
   
   const commands = [
     {
-      cmd: 'shepherd analyze trace.json',
+      cmd: 'shepherd> run agent:order_bot',
       output: [
         { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  📊 Session Analysis                         │' },
+        { type: 'header', text: '│  🚀 Starting Agent Session                   │' },
         { type: 'header', text: '╰──────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'label', text: '  Session:', value: 'travel-agent-run-2847' },
-        { type: 'label', text: '  Duration:', value: '4.2s' },
-        { type: 'label', text: '  LLM Calls:', value: '6' },
-        { type: 'label', text: '  Tool Calls:', value: '3' },
-        { type: 'label', text: '  Tokens:', value: '2,847 ($0.0043)' },
-        { type: 'success', text: '  Status:', value: '✓ Success' },
+        { type: 'label', text: '  Session:', value: 'order_bot_run_248' },
+        { type: 'label', text: '  Agent:', value: 'order_bot' },
+        { type: 'label', text: '  Mode:', value: 'instrumented' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  ▶ Agent running...', value: 'Press Ctrl+C to break' },
       ]
     },
     {
-      cmd: 'shepherd errors trace.json',
+      cmd: 'shepherd> break tool:set_price',
       output: [
         { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🔍 Error Detection                          │' },
+        { type: 'header', text: '│  🔴 Breakpoint Set                           │' },
         { type: 'header', text: '╰──────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'warning', text: '  ⚠ Warning:', value: 'High latency detected (3.2s)' },
-        { type: 'info', text: '    └─ chat.completions @ line 142' },
+        { type: 'success', text: '  ✓ Breakpoint #1:', value: 'tool:set_price' },
+        { type: 'label', text: '  Type:', value: 'tool invocation' },
+        { type: 'label', text: '  Condition:', value: 'always' },
         { type: 'info', text: '' },
-        { type: 'warning', text: '  ⚠ Warning:', value: 'Retry detected (2 attempts)' },
-        { type: 'info', text: '    └─ search_flights() @ line 89' },
-        { type: 'info', text: '' },
-        { type: 'success', text: '  No critical errors found' },
+        { type: 'info', text: '  Use "step" to advance, "continue" to resume' },
       ]
     },
     {
-      cmd: 'shepherd assert trace.json --max-latency 5000',
+      cmd: 'shepherd> replay run_248',
       output: [
         { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  ✅ CI/CD Assertions                         │' },
+        { type: 'header', text: '│  🔄 Deterministic Replay                     │' },
         { type: 'header', text: '╰──────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'success', text: '  ✓ max-latency:', value: '4200ms < 5000ms' },
-        { type: 'success', text: '  ✓ no-errors:', value: 'passed' },
-        { type: 'success', text: '  ✓ no-loops:', value: 'passed' },
+        { type: 'label', text: '  Run ID:', value: 'run_248' },
+        { type: 'label', text: '  Original:', value: '2025-12-05 14:32:18' },
+        { type: 'success', text: '  Seeds:', value: 'locked ✓' },
+        { type: 'success', text: '  Tool responses:', value: 'cached ✓' },
         { type: 'info', text: '' },
-        { type: 'success', text: '  All assertions passed! Exit code: 0' },
+        { type: 'success', text: '  ▶ Replaying with exact inputs...' },
+      ]
+    },
+    {
+      cmd: 'shepherd> explain run_248',
+      output: [
+        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🔍 Root Cause Analysis                      │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'info', text: '' },
+        { type: 'error', text: '  ✗ Failure:', value: 'Tool timeout at step 4' },
+        { type: 'warning', text: '  Cause:', value: 'set_price() exceeded 30s limit' },
+        { type: 'info', text: '    └─ API rate limit triggered' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  💡 Suggestion:', value: 'Add retry with backoff' },
+      ]
+    },
+    {
+      cmd: 'shepherd> fix run_248',
+      output: [
+        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🔧 Self-Healing Patch                       │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'info', text: '' },
+        { type: 'label', text: '  File:', value: 'prompts/order_bot.txt' },
+        { type: 'warning', text: '  - "Process order immediately"' },
+        { type: 'success', text: '  + "Process order with retry on failure"' },
+        { type: 'info', text: '' },
+        { type: 'success', text: '  ✓ Patch ready.', value: 'Apply with --apply flag' },
       ]
     }
   ]
 
   const features = [
-    { icon: <Terminal size={18} />, title: 'Local Analysis', desc: 'Analyze traces without leaving your terminal' },
-    { icon: <Play size={18} />, title: 'CI/CD Ready', desc: 'Assert conditions in your pipelines' },
-    { icon: <Search size={18} />, title: 'Quick Debugging', desc: 'Find errors and issues instantly' },
-    { icon: <Cloud size={18} />, title: 'Cloud Sync', desc: 'Upload traces to Shepherd cloud' },
+    { icon: <Play size={18} />, title: 'Interactive Execution', desc: 'Run agents in isolated, instrumented environments' },
+    { icon: <Target size={18} />, title: 'Breakpoints', desc: 'Break on tools, LLM calls, conditions, or branches' },
+    { icon: <RotateCcw size={18} />, title: 'Deterministic Replay', desc: 'Replay runs with exact inputs & random seeds' },
+    { icon: <Zap size={18} />, title: 'Self-Healing Fixes', desc: 'Get diff-style patches for prompts & config' },
   ]
 
   useEffect(() => {
@@ -1762,7 +1789,7 @@ function CLIPreview() {
   }, [])
 
   return (
-    <section className="section section--subtle cli-preview" id="cli">
+    <section className="section section--subtle cli-preview" id="shell">
       <div className="container">
         <motion.div
           className="cli-preview__content"
@@ -1774,20 +1801,21 @@ function CLIPreview() {
           <motion.div className="cli-preview__header" variants={fadeInUp}>
             <div className="cli-preview__badges">
               <div className="cli-preview__badge cli-preview__badge--coming-soon">
-                <span className="cli-preview__badge-dot"></span>
-                Coming Soon
+                <Loader2 size={12} className="cli-preview__badge-spinner" />
+                Under Planning
               </div>
               <div className="cli-preview__badge">
                 <Terminal size={14} />
-                CLI Tool
+                GDB for AI Agents
               </div>
             </div>
             <h2 className="heading-lg">
-              Debug from your terminal.
+              🛠️ Shepherd Shell
             </h2>
             <p className="text-lg">
-              A powerful command-line interface for Shepherd — analyze traces, detect issues, 
-              and integrate with CI/CD pipelines without leaving your terminal.
+              The first GDB-style debugger for AI agents — step through execution, 
+              set breakpoints, replay runs deterministically, and auto-fix failures.
+              <br /><strong>Everyone has dashboards. Nobody has a GDB.</strong>
             </p>
           </motion.div>
 
@@ -1797,7 +1825,7 @@ function CLIPreview() {
                 <div className="cli-terminal__dots">
                   <span></span><span></span><span></span>
                 </div>
-                <span className="cli-terminal__title">Terminal — shepherd</span>
+                <span className="cli-terminal__title">Shepherd Shell — Interactive Debugger</span>
                 <div className="cli-terminal__tabs">
                   {commands.map((c, i) => (
                     <button
@@ -1858,39 +1886,9 @@ function CLIPreview() {
             ))}
           </motion.div>
 
-          <motion.div className="cli-preview__commands" variants={fadeInUp}>
-            <h4 className="cli-preview__commands-title">Preview Commands</h4>
-            <div className="cli-preview__commands-grid">
-              <div className="cli-preview__cmd">
-                <code>shepherd analyze</code>
-                <span>Quick stats summary</span>
-              </div>
-              <div className="cli-preview__cmd">
-                <code>shepherd errors</code>
-                <span>Detect failures & issues</span>
-              </div>
-              <div className="cli-preview__cmd">
-                <code>shepherd assert</code>
-                <span>CI/CD assertions</span>
-              </div>
-              <div className="cli-preview__cmd">
-                <code>shepherd upload</code>
-                <span>Push to cloud</span>
-              </div>
-              <div className="cli-preview__cmd">
-                <code>shepherd watch</code>
-                <span>Auto-upload new traces</span>
-              </div>
-              <div className="cli-preview__cmd">
-                <code>shepherd enhance</code>
-                <span>Prompt suggestions</span>
-              </div>
-            </div>
-          </motion.div>
-
           <motion.div className="cli-preview__cta" variants={fadeInUp}>
             <p className="cli-preview__cta-text">
-              Want early access to the CLI?
+              Want early access to Shepherd Shell?
             </p>
             <a 
               href="https://github.com/neuralis-in/aiobs" 
@@ -2104,7 +2102,7 @@ function App() {
         <HowItWorks />
         <PromptEnhancement />
         <Developer />
-        <CLIPreview />
+        <ShepherdShell />
         <Features />
         <JsonTrace />
         <WhyShepherd />
