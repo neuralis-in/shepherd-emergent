@@ -442,21 +442,22 @@ function Hero({ onOpenModal }) {
             Built on aiobs — open-source Python SDK
           </motion.div>
           <motion.div className="hero__title-wrapper" variants={fadeInUp}>
+            <a href="#shell" className="hero__cli-ribbon hero__cli-ribbon--live">
+              <Terminal size={10} />
+              <span>shepherd-cli v0.0.1</span>
+              <span className="hero__ribbon-badge">NEW</span>
+            </a>
             <span className="hero__coming-soon-ribbon">
               <span className="hero__ribbon-dot"></span>
               prompt-enhancer coming soon
             </span>
-            <a href="#shell" className="hero__cli-ribbon">
-              <Terminal size={12} />
-              <span>Shepherd Shell</span>
-            </a>
             <h1 className="heading-xl hero__title">
               Shepherd traces AI agents<br />so they don't fail.
             </h1>
           </motion.div>
           <motion.p className="text-lg hero__subtitle" variants={fadeInUp}>
-            Wrap your agent code with observer calls to trace every LLM step, tool call, and decision — 
-            turning opaque agent pipelines into deterministic, debuggable timelines.
+            Trace every LLM call, tool invocation, and decision — turning opaque agent pipelines 
+            into debuggable timelines. CLI-first, so AI coding agents can use it too.
           </motion.p>
           <motion.div className="hero__actions" variants={fadeInUp}>
             <div className="hero__action-group">
@@ -984,6 +985,84 @@ function DemoTraceTree() {
         </Link>
       </div>
     </div>
+  )
+}
+
+// Paradigm Shift Section - Why CLI over Dashboards
+function ParadigmShift() {
+  const oldWay = [
+    { icon: <PieChart size={18} />, text: "Proprietary dashboards" },
+    { icon: <User size={18} />, text: "Human-in-the-loop analysis" },
+    { icon: <Activity size={18} />, text: "Click-heavy workflows" },
+    { icon: <Clock size={18} />, text: "Context-switch to browser" },
+  ]
+
+  const newWay = [
+    { icon: <Terminal size={18} />, text: "CLI-first observability" },
+    { icon: <Bot size={18} />, text: "Agent-friendly interfaces" },
+    { icon: <Code size={18} />, text: "JSON output for automation" },
+    { icon: <Zap size={18} />, text: "Stay in your coding flow" },
+  ]
+
+  return (
+    <section className="section paradigm-shift">
+      <div className="container">
+        <motion.div
+          className="paradigm-shift__content"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 className="heading-lg paradigm-shift__title" variants={fadeInUp}>
+            The world has moved to agentic coding.
+            <br />
+            <span className="paradigm-shift__highlight">Observability hasn't caught up.</span>
+          </motion.h2>
+          
+          <motion.div className="paradigm-shift__comparison" variants={fadeInUp}>
+            <div className="paradigm-shift__column paradigm-shift__column--old">
+              <h3 className="paradigm-shift__column-title">
+                <X size={18} />
+                Traditional Observability
+              </h3>
+              <ul className="paradigm-shift__list">
+                {oldWay.map((item, i) => (
+                  <li key={i} className="paradigm-shift__item paradigm-shift__item--old">
+                    {item.icon}
+                    <span>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="paradigm-shift__divider">
+              <ArrowRight size={24} />
+            </div>
+            
+            <div className="paradigm-shift__column paradigm-shift__column--new">
+              <h3 className="paradigm-shift__column-title">
+                <CheckCircle size={18} />
+                Shepherd CLI
+              </h3>
+              <ul className="paradigm-shift__list">
+                {newWay.map((item, i) => (
+                  <li key={i} className="paradigm-shift__item paradigm-shift__item--new">
+                    {item.icon}
+                    <span>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+          
+          <motion.p className="text-lg paradigm-shift__subtitle" variants={fadeInUp}>
+            When an AI-powered IDE debugs your agent, it can't click through dashboards. It needs a CLI 
+            that speaks JSON — to pull traces, filter failures, and diff sessions. <strong>That's Shepherd CLI.</strong>
+          </motion.p>
+        </motion.div>
+      </div>
+    </section>
   )
 }
 
@@ -1673,7 +1752,7 @@ function Developer() {
   )
 }
 
-// Shepherd Shell Section - GDB-Style Debugger for AI Agents
+// Shepherd CLI Section - CLI-First Observability for Agentic Coding Tools
 function ShepherdShell() {
   const [activeCommand, setActiveCommand] = useState(0)
   const [isTyping, setIsTyping] = useState(true)
@@ -1681,83 +1760,82 @@ function ShepherdShell() {
   
   const commands = [
     {
-      cmd: 'shepherd> run agent:order_bot',
+      cmd: 'shepherd sessions list -n 5',
       output: [
-        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🚀 Starting Agent Session                   │' },
-        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'header', text: '╭──────────────────────────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  📋 Recent Sessions                                              │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'label', text: '  Session:', value: 'order_bot_run_248' },
-        { type: 'label', text: '  Agent:', value: 'order_bot' },
-        { type: 'label', text: '  Mode:', value: 'instrumented' },
-        { type: 'info', text: '' },
-        { type: 'success', text: '  ▶ Agent running...', value: 'Press Ctrl+C to break' },
+        { type: 'label', text: '  sess_7x8k2m', value: 'travel_agent    ✓ 2.4s   gpt-4o' },
+        { type: 'label', text: '  sess_9p3q1n', value: 'code_reviewer   ✓ 1.8s   claude-3' },
+        { type: 'error', text: '  sess_4h5j6k', value: 'order_bot       ✗ 4.1s   gpt-4o' },
+        { type: 'label', text: '  sess_2w3e4r', value: 'data_analyst    ✓ 3.2s   gpt-4o-mini' },
+        { type: 'label', text: '  sess_1a2b3c', value: 'support_agent   ✓ 1.5s   gemini-pro' },
       ]
     },
     {
-      cmd: 'shepherd> break tool:set_price',
+      cmd: 'shepherd sessions search --has-errors --after 2025-12-01',
       output: [
-        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🔴 Breakpoint Set                           │' },
-        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'header', text: '╭──────────────────────────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🔍 Sessions with Errors (since Dec 1)                           │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'success', text: '  ✓ Breakpoint #1:', value: 'tool:set_price' },
-        { type: 'label', text: '  Type:', value: 'tool invocation' },
-        { type: 'label', text: '  Condition:', value: 'always' },
+        { type: 'error', text: '  sess_4h5j6k', value: 'order_bot - Tool timeout at step 4' },
+        { type: 'error', text: '  sess_8m9n0p', value: 'invoice_gen - Rate limit exceeded' },
+        { type: 'error', text: '  sess_5t6y7u', value: 'email_agent - Invalid JSON response' },
         { type: 'info', text: '' },
-        { type: 'info', text: '  Use "step" to advance, "continue" to resume' },
+        { type: 'label', text: '  Found:', value: '3 sessions with errors' },
       ]
     },
     {
-      cmd: 'shepherd> replay run_248',
+      cmd: 'shepherd sessions get sess_4h5j6k',
       output: [
-        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🔄 Deterministic Replay                     │' },
-        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'header', text: '╭──────────────────────────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🌳 Trace Tree: sess_4h5j6k                                      │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'label', text: '  Run ID:', value: 'run_248' },
-        { type: 'label', text: '  Original:', value: '2025-12-05 14:32:18' },
-        { type: 'success', text: '  Seeds:', value: 'locked ✓' },
-        { type: 'success', text: '  Tool responses:', value: 'cached ✓' },
-        { type: 'info', text: '' },
-        { type: 'success', text: '  ▶ Replaying with exact inputs...' },
+        { type: 'success', text: '  └─ order_bot.process_order', value: '4.1s' },
+        { type: 'success', text: '      ├─ chat.completions (gpt-4o)', value: '890ms ✓' },
+        { type: 'success', text: '      ├─ validate_inventory()', value: '120ms ✓' },
+        { type: 'error', text: '      └─ set_price()', value: '3.0s ✗ TIMEOUT' },
       ]
     },
     {
-      cmd: 'shepherd> explain run_248',
+      cmd: 'shepherd sessions diff sess_4h5j6k sess_7x8k2m',
       output: [
-        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🔍 Root Cause Analysis                      │' },
-        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'header', text: '╭──────────────────────────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  📊 Session Diff                                                 │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'error', text: '  ✗ Failure:', value: 'Tool timeout at step 4' },
-        { type: 'warning', text: '  Cause:', value: 'set_price() exceeded 30s limit' },
-        { type: 'info', text: '    └─ API rate limit triggered' },
+        { type: 'label', text: '  Duration:', value: '4.1s vs 2.4s (+1.7s)' },
+        { type: 'label', text: '  LLM Calls:', value: '3 vs 3 (same)' },
+        { type: 'error', text: '  Errors:', value: '1 vs 0' },
+        { type: 'warning', text: '  Divergence:', value: 'Step 4 - set_price() timeout' },
         { type: 'info', text: '' },
-        { type: 'success', text: '  💡 Suggestion:', value: 'Add retry with backoff' },
+        { type: 'success', text: '  💡 Root cause:', value: 'Missing retry logic' },
       ]
     },
     {
-      cmd: 'shepherd> fix run_248',
+      cmd: 'shepherd shell',
       output: [
-        { type: 'header', text: '╭──────────────────────────────────────────────╮' },
-        { type: 'header', text: '│  🔧 Self-Healing Patch                       │' },
-        { type: 'header', text: '╰──────────────────────────────────────────────╯' },
+        { type: 'header', text: '╭──────────────────────────────────────────────────────────────────╮' },
+        { type: 'header', text: '│  🐑 Shepherd Interactive Shell v0.0.1                            │' },
+        { type: 'header', text: '╰──────────────────────────────────────────────────────────────────╯' },
         { type: 'info', text: '' },
-        { type: 'label', text: '  File:', value: 'prompts/order_bot.txt' },
-        { type: 'warning', text: '  - "Process order immediately"' },
-        { type: 'success', text: '  + "Process order with retry on failure"' },
+        { type: 'success', text: '  ✓ Connected to aiobs backend' },
+        { type: 'label', text: '  Provider:', value: 'aiobs' },
         { type: 'info', text: '' },
-        { type: 'success', text: '  ✓ Patch ready.', value: 'Apply with --apply flag' },
+        { type: 'info', text: '  Type "help" for commands, "exit" to quit' },
+        { type: 'success', text: '  shepherd >', value: '▋' },
       ]
     }
   ]
 
   const features = [
-    { icon: <Play size={18} />, title: 'Interactive Execution', desc: 'Run agents in isolated, instrumented environments' },
-    { icon: <Target size={18} />, title: 'Breakpoints', desc: 'Break on tools, LLM calls, conditions, or branches' },
-    { icon: <RotateCcw size={18} />, title: 'Deterministic Replay', desc: 'Replay runs with exact inputs & random seeds' },
-    { icon: <Bot size={18} />, title: 'Trace Agent', desc: 'AI that reasons over your execution graph to explain & diagnose' },
+    { icon: <Search size={18} />, title: 'Search & Filter', desc: 'Find sessions by provider, model, errors, labels, date' },
+    { icon: <GitBranch size={18} />, title: 'Trace Trees', desc: 'View full execution trees with timing & status' },
+    { icon: <Activity size={18} />, title: 'Session Diff', desc: 'Compare two sessions side-by-side to find regressions' },
+    { icon: <Bot size={18} />, title: 'Agent-Friendly', desc: 'JSON output for AI-powered IDEs & coding agents' },
   ]
 
   useEffect(() => {
@@ -1800,22 +1878,22 @@ function ShepherdShell() {
         >
           <motion.div className="cli-preview__header" variants={fadeInUp}>
             <div className="cli-preview__badges">
-              <div className="cli-preview__badge cli-preview__badge--coming-soon">
-                <Loader2 size={12} className="cli-preview__badge-spinner" />
-                Under Planning
+              <div className="cli-preview__badge cli-preview__badge--live">
+                <CheckCircle size={12} />
+                v0.0.1 Live
               </div>
               <div className="cli-preview__badge">
                 <Terminal size={14} />
-                GDB for AI Agents
+                CLI-First Observability
               </div>
             </div>
             <h2 className="heading-lg">
-              🛠️ Shepherd Shell
+              🐑 Shepherd CLI
             </h2>
             <p className="text-lg">
-              The first GDB-style debugger for AI agents — step through execution, 
-              set breakpoints, replay runs deterministically, and auto-fix failures.
-              <br /><strong>Everyone has dashboards. Nobody has a GDB.</strong>
+              Observability built for agentic coding tools. Give AI-powered IDEs and coding agents 
+              access to search sessions, filter by errors, compare traces, and debug — all via CLI.
+              <br /><strong>Dashboards are for humans. CLI is for agents.</strong>
             </p>
           </motion.div>
 
@@ -1887,21 +1965,39 @@ function ShepherdShell() {
           </motion.div>
 
           <motion.div className="cli-preview__cta" variants={fadeInUp}>
-            <p className="cli-preview__cta-text">
-              Want early access to Shepherd Shell?
-            </p>
+            <div className="cli-preview__install">
+              <code>pip install shepherd-cli</code>
+              <button 
+                className="cli-preview__copy-btn"
+                onClick={() => navigator.clipboard.writeText('pip install shepherd-cli')}
+                title="Copy to clipboard"
+              >
+                <Copy size={14} />
+              </button>
+            </div>
             <p className="cli-preview__cta-subtext">
-              GDB-style debugger + an AI agent that reasons over your traces
+              Works with aiobs today. Langfuse, Phoenix & more coming soon
             </p>
-            <a 
-              href="https://github.com/neuralis-in/aiobs" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn btn--secondary"
-            >
-              <Github size={16} />
-              Star on GitHub
-            </a>
+            <div className="cli-preview__cta-buttons">
+              <a 
+                href="https://github.com/neuralis-in/shepherd-cli" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn--primary"
+              >
+                <Github size={16} />
+                View on GitHub
+              </a>
+              <a 
+                href="https://neuralis-in.github.io/shepherd-cli/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn--secondary"
+              >
+                <ExternalLink size={16} />
+                Documentation
+              </a>
+            </div>
           </motion.div>
         </motion.div>
       </div>
@@ -1912,12 +2008,12 @@ function ShepherdShell() {
 // Features Section
 function Features() {
   const features = [
-    { icon: <Clock size={20} />, title: "Deterministic Timeline", desc: "Replay any agent run" },
-    { icon: <Layers size={20} />, title: "LLM + Tool Visibility", desc: "See all inputs/outputs clearly" },
-    { icon: <AlertCircle size={20} />, title: "Failure Surfacing", desc: "Detect loops, stalls, broken tool chains" },
-    { icon: <GitBranch size={20} />, title: "Reproducible Debugging", desc: "Get exact callsites & parameters" },
-    { icon: <Cpu size={20} />, title: "SDK-native", desc: "Works with OpenAI, Gemini, custom providers" },
-    { icon: <Github size={20} />, title: "Open-source Core", desc: "aiobs powers all event capture" },
+    { icon: <Terminal size={20} />, title: "CLI-First", desc: "Built for agents, not browsers" },
+    { icon: <Search size={20} />, title: "Powerful Search", desc: "Filter by provider, model, errors, labels, dates" },
+    { icon: <GitBranch size={20} />, title: "Session Diff", desc: "Compare runs to find regressions" },
+    { icon: <Code size={20} />, title: "JSON Output", desc: "-o json for AI IDEs & agents" },
+    { icon: <Layers size={20} />, title: "Multi-Provider", desc: "aiobs now, Langfuse & Phoenix soon" },
+    { icon: <Github size={20} />, title: "Open-Source", desc: "MIT licensed on GitHub" },
   ]
 
   return (
@@ -2070,11 +2166,12 @@ function Footer() {
           </Link>
         </div>
         <nav className="footer__links">
+          <a href="https://github.com/neuralis-in/shepherd-cli" target="_blank" rel="noopener noreferrer">Shepherd CLI</a>
           <Link to="/pricing">Pricing</Link>
           <Link to="/integrations">Integrations</Link>
           <Link to="/blog">Blog</Link>
-          <a href="https://neuralis-in.github.io/aiobs/getting_started.html" target="_blank" rel="noopener noreferrer">Docs</a>
-          <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://neuralis-in.github.io/shepherd-cli/" target="_blank" rel="noopener noreferrer">CLI Docs</a>
+          <a href="https://github.com/neuralis-in/aiobs" target="_blank" rel="noopener noreferrer">aiobs SDK</a>
           <Link to="/privacy">Privacy</Link>
           <Link to="/contact">Contact</Link>
         </nav>
@@ -2101,11 +2198,12 @@ function App() {
         <hr className="divider" />
         <Problem />
         <Solution />
+        <ParadigmShift />
+        <ShepherdShell />
         <AiobsSection />
         <HowItWorks />
         <PromptEnhancement />
         <Developer />
-        <ShepherdShell />
         <Features />
         <JsonTrace />
         <WhyShepherd />

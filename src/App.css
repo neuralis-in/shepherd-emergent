@@ -386,20 +386,20 @@
 /* CLI Coming Soon Ribbon - Floating/Waving */
 .hero__cli-ribbon {
   position: absolute;
-  top: -8px;
-  left: -60px;
+  top: -6px;
+  left: -50px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 4px 8px;
   background: var(--color-accent);
   color: #fff;
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-radius: 6px;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
   cursor: pointer;
   transition: background var(--transition-fast);
   animation: cliFloat 4s ease-in-out infinite;
@@ -413,8 +413,8 @@
 }
 
 .hero__cli-ribbon svg {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   animation: cliTerminalBlink 1.5s ease-in-out infinite;
 }
 
@@ -2926,4 +2926,209 @@
   .modal {
     padding: var(--spacing-lg);
   }
+}
+
+/* ========================================
+   PARADIGM SHIFT SECTION
+   ======================================== */
+
+.paradigm-shift {
+  padding: var(--spacing-2xl) 0;
+}
+
+.paradigm-shift__content {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.paradigm-shift__title {
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.3;
+}
+
+.paradigm-shift__highlight {
+  background: linear-gradient(135deg, #111 0%, #333 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.paradigm-shift__comparison {
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.paradigm-shift__column {
+  flex: 1;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: left;
+}
+
+.paradigm-shift__column--old {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+}
+
+.paradigm-shift__column--new {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+}
+
+.paradigm-shift__column-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.paradigm-shift__column--old .paradigm-shift__column-title {
+  color: #DC2626;
+}
+
+.paradigm-shift__column--new .paradigm-shift__column-title {
+  color: #16A34A;
+}
+
+.paradigm-shift__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.paradigm-shift__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9375rem;
+}
+
+.paradigm-shift__item--old {
+  color: #7F1D1D;
+}
+
+.paradigm-shift__item--new {
+  color: #14532D;
+}
+
+.paradigm-shift__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.paradigm-shift__subtitle {
+  max-width: 700px;
+  margin: 0 auto;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .paradigm-shift__comparison {
+    flex-direction: column;
+  }
+  
+  .paradigm-shift__divider {
+    transform: rotate(90deg);
+    padding: var(--spacing-sm) 0;
+  }
+}
+
+/* ========================================
+   CLI PREVIEW - LIVE BADGE & INSTALL
+   ======================================== */
+
+.cli-preview__badge--live {
+  background: #10B981;
+  border: none;
+  color: white;
+}
+
+.cli-preview__badge--live:hover {
+  background: #059669;
+}
+
+.cli-preview__install {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.cli-preview__install code {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.cli-preview__install code::before {
+  content: "$ ";
+  color: var(--color-text-muted);
+}
+
+.cli-preview__copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.cli-preview__copy-btn:hover {
+  background: var(--color-bg);
+  border-color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.cli-preview__cta-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   HERO CLI RIBBON - LIVE VERSION
+   ======================================== */
+
+.hero__cli-ribbon--live {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border-color: #059669;
+  color: white;
+  text-decoration: none;
+}
+
+.hero__cli-ribbon--live:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.hero__ribbon-badge {
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  background: white;
+  color: #059669;
+  border-radius: 3px;
+  margin-left: 2px;
 }
