@@ -16,6 +16,7 @@ import Contact from './pages/Contact.jsx'
 import Privacy from './pages/Privacy.jsx'
 import Blog from './pages/Blog.jsx'
 import PitchDeck from './pages/PitchDeck.jsx'
+import ShepherdProgress from './pages/ShepherdProgress.jsx'
 import Community from './pages/Community.jsx'
 
 // ScrollToTop component - scrolls to top on route change
@@ -52,6 +53,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/*" element={<Blog />} />
         <Route path="/pitch-deck" element={<PitchDeck />} />
+        <Route path="/pitch-deck/updates" element={<ShepherdProgress />} />
         <Route path="/community" element={<Community />} />
       </Routes>
     </BrowserRouter>
