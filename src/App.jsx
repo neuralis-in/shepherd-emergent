@@ -41,7 +41,8 @@ import {
   ChevronDown,
   ChevronRight,
   LogIn,
-  Target
+  Target,
+  Settings2
 } from 'lucide-react'
 import './App.css'
 import PromptEnhancement from './components/PromptEnhancement'
@@ -2056,7 +2057,7 @@ function ShepherdMCP() {
     },
     {
       id: 'configure',
-      icon: <SlidersIcon size={16} />,
+      icon: <Settings2 size={16} />,
       label: 'Configure'
     },
     {
