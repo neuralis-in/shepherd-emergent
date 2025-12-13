@@ -2892,6 +2892,8 @@
 
 .mcp-example-card__copy:hover {
   background: var(--color-bg);
+  border-color: var(--color-text-muted);
+}
 
 /* ========================================
    MCP PANEL (Tabs / Config / Accordion)
