@@ -2081,6 +2081,7 @@ function ShepherdMCP() {
               Connect Shepherd to your AI coding assistants via the Model Context Protocol. 
               Give AI tools direct access to trace data, session analytics, and debugging insights — 
               all through a standardized MCP interface.
+              Shepherd MCP is provider-agnostic: it works with aiobs today, with Langfuse, Phoenix, and more observability backends coming soon.
             </p>
           </motion.div>
 
