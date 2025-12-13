@@ -2849,7 +2849,7 @@
 
 .mcp-example-card__body {
   padding: var(--spacing-lg);
-  background: #FAFAFA;
+  background: linear-gradient(180deg, rgba(250, 250, 250, 0.92), rgba(245, 245, 245, 0.92));
 }
 
 .mcp-example-card__code {
