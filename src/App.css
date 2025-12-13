@@ -2526,15 +2526,55 @@
    ======================================== */
 
 .mcp-section {
+  position: relative;
   background: var(--color-bg);
+  overflow: hidden;
+}
+
+.mcp-section::before {
+  content: '';
+  position: absolute;
+  inset: -80px -40px auto -40px;
+  height: 260px;
+  background:
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.06), transparent 60%),
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.04), transparent 62%);
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .mcp-section__content {
+  position: relative;
+  z-index: 1;
   text-align: center;
 }
 
 .mcp-section__header {
   margin-bottom: var(--spacing-xl);
+}
+
+.mcp-section__title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.mcp-section__title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  backdrop-filter: blur(14px);
+}
+
+.mcp-muted {
+  color: var(--color-text-muted);
 }
 
 .mcp-section__badges {
