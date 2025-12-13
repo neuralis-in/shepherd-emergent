@@ -38,9 +38,8 @@ export default function AuthCallback() {
 
     try {
       // Construct redirect URI - must match what's registered in Google OAuth
-      // For GitHub Pages: https://neuralis-in.github.io/shepherd/auth/callback
       const baseUrl = window.location.origin
-      const basePath = import.meta.env.BASE_URL || '/shepherd/'
+      const basePath = import.meta.env.BASE_URL || '/'
       const redirectUri = `${baseUrl}${basePath}auth/callback`.replace(/\/+/g, '/').replace(':/', '://')
       
       console.log('Auth callback - Redirect URI:', redirectUri)
