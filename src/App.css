@@ -2809,13 +2809,14 @@
 }
 
 .mcp-example-card {
-  background: var(--color-bg);
+  background: rgba(255, 255, 255, 0.75);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: 18px;
   overflow: hidden;
   max-width: 600px;
   margin: 0 auto;
   text-align: left;
+  backdrop-filter: blur(18px);
 }
 
 .mcp-example-card__header {
