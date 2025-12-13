@@ -2078,7 +2078,8 @@ function ShepherdMCP() {
               🔌 Shepherd MCP
             </h2>
             <p className="text-lg">
-              Provider-agnostic MCP server for agentic coding tools. Works with aiobs today, with Langfuse, Phoenix & more coming soon.
+              MCP (Model Context Protocol) server for Shepherd — debug your AI agents like you debug your code.
+              Provider-agnostic: works with aiobs today, with Langfuse, Phoenix & more coming soon.
             </p>
           </motion.div>
 
