@@ -2005,6 +2005,215 @@ function ShepherdShell() {
   )
 }
 
+// Shepherd MCP Section - MCP Server Integration
+function ShepherdMCP() {
+  const features = [
+    {
+      icon: <Bot size={24} />,
+      title: 'MCP Protocol',
+      desc: 'Full Model Context Protocol support for seamless integration with AI assistants'
+    },
+    {
+      icon: <Server size={24} />,
+      title: 'Shepherd Server',
+      desc: 'Run shepherd as an MCP server to expose tracing capabilities to any MCP client'
+    },
+    {
+      icon: <Database size={24} />,
+      title: 'Real-time Access',
+      desc: 'Query sessions, traces, and analytics directly from your AI coding assistant'
+    },
+    {
+      icon: <Terminal size={24} />,
+      title: 'CLI Compatible',
+      desc: 'Works alongside shepherd-cli for a complete observability workflow'
+    },
+    {
+      icon: <Zap size={24} />,
+      title: 'Zero Config',
+      desc: 'Auto-discovers your aiobs backend and starts serving MCP endpoints instantly'
+    },
+    {
+      icon: <Code size={24} />,
+      title: 'IDE Integration',
+      desc: 'Connect with Cursor, Windsurf, Claude Desktop, and other MCP-enabled tools'
+    }
+  ]
+
+  const integrations = [
+    { name: 'Cursor', icon: <Code size={20} /> },
+    { name: 'Windsurf', icon: <Activity size={20} /> },
+    { name: 'Claude Desktop', icon: <Bot size={20} /> },
+    { name: 'VS Code', icon: <Terminal size={20} /> }
+  ]
+
+  const commands = [
+    { cmd: 'pip install shepherd-mcp', desc: 'Install shepherd MCP server' },
+    { cmd: 'shepherd-mcp start', desc: 'Start the MCP server' },
+    { cmd: 'shepherd-mcp config', desc: 'Configure your aiobs backend' }
+  ]
+
+  return (
+    <section className="section mcp-section">
+      <div className="container">
+        <motion.div
+          className="mcp-section__content"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div className="mcp-section__header" variants={fadeInUp}>
+            <div className="mcp-section__badges">
+              <div className="mcp-section__badge mcp-section__badge--new">
+                <Zap size={12} />
+                New
+              </div>
+              <div className="mcp-section__badge">
+                <Server size={14} />
+                MCP Server
+              </div>
+            </div>
+            <h2 className="heading-lg">
+              🔌 Shepherd MCP
+            </h2>
+            <p className="text-lg">
+              Connect Shepherd to your AI coding assistants via the Model Context Protocol. 
+              Give AI tools direct access to trace data, session analytics, and debugging insights — 
+              all through a standardized MCP interface.
+            </p>
+          </motion.div>
+
+          <motion.div className="mcp-section__install" variants={fadeInUp}>
+            <h3 className="heading-md mcp-section__install-title">Quick Start</h3>
+            <div className="mcp-section__install-grid">
+              {commands.map((command, i) => (
+                <div key={i} className="mcp-install-card">
+                  <div className="mcp-install-card__header">
+                    <Terminal size={16} />
+                    <span className="mcp-install-card__step">Step {i + 1}</span>
+                  </div>
+                  <code className="mcp-install-card__code">{command.cmd}</code>
+                  <p className="mcp-install-card__desc">{command.desc}</p>
+                  <button 
+                    className="mcp-install-card__copy"
+                    onClick={() => navigator.clipboard.writeText(command.cmd)}
+                    title="Copy to clipboard"
+                  >
+                    <Copy size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div className="mcp-section__features" variants={fadeInUp}>
+            <h3 className="heading-md mcp-section__features-title">Capabilities</h3>
+            <div className="mcp-features-grid">
+              {features.map((feature, i) => (
+                <motion.div 
+                  key={i} 
+                  className="mcp-feature-card"
+                  variants={fadeInUp}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                >
+                  <div className="mcp-feature-card__icon">{feature.icon}</div>
+                  <h4 className="mcp-feature-card__title">{feature.title}</h4>
+                  <p className="mcp-feature-card__desc">{feature.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div className="mcp-section__integrations" variants={fadeInUp}>
+            <h3 className="heading-md mcp-section__integrations-title">Works With</h3>
+            <div className="mcp-integrations-list">
+              {integrations.map((integration, i) => (
+                <div key={i} className="mcp-integration-item">
+                  <div className="mcp-integration-item__icon">{integration.icon}</div>
+                  <span className="mcp-integration-item__name">{integration.name}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mcp-section__integrations-note">
+              Any MCP-compatible client can connect to shepherd-mcp
+            </p>
+          </motion.div>
+
+          <motion.div className="mcp-section__example" variants={fadeInUp}>
+            <div className="mcp-example-card">
+              <div className="mcp-example-card__header">
+                <div className="mcp-example-card__dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <span className="mcp-example-card__title">MCP Configuration Example</span>
+              </div>
+              <div className="mcp-example-card__body">
+                <pre className="mcp-example-card__code">
+{`{
+  "mcpServers": {
+    "shepherd": {
+      "command": "shepherd-mcp",
+      "args": ["start"],
+      "env": {
+        "AIOBS_API_KEY": "your_aiobs_key"
+      }
+    }
+  }
+}`}
+                </pre>
+              </div>
+              <div className="mcp-example-card__footer">
+                <span className="mcp-example-card__label">Add to your MCP client config</span>
+                <button 
+                  className="mcp-example-card__copy"
+                  onClick={() => navigator.clipboard.writeText(`{
+  "mcpServers": {
+    "shepherd": {
+      "command": "shepherd-mcp",
+      "args": ["start"],
+      "env": {
+        "AIOBS_API_KEY": "your_aiobs_key"
+      }
+    }
+  }
+}`)}
+                >
+                  <Copy size={14} />
+                  Copy
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div className="mcp-section__cta" variants={fadeInUp}>
+            <div className="mcp-section__cta-buttons">
+              <a 
+                href="https://github.com/neuralis-in/shepherd-mcp" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn--primary"
+              >
+                <Github size={16} />
+                View on GitHub
+              </a>
+              <a 
+                href="https://neuralis-in.github.io/shepherd-mcp/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn--secondary"
+              >
+                <ExternalLink size={16} />
+                Documentation
+              </a>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // Features Section
 function Features() {
   const features = [
