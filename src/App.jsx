@@ -2409,6 +2409,7 @@ function App() {
         <Solution />
         <ParadigmShift />
         <ShepherdShell />
+        <ShepherdMCP />
         <AiobsSection />
         <HowItWorks />
         <PromptEnhancement />
