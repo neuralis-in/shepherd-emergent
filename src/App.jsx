@@ -43,6 +43,8 @@ import {
   LogIn,
   Target,
   Settings2
+,
+  Settings2
 } from 'lucide-react'
 import './App.css'
 import PromptEnhancement from './components/PromptEnhancement'
