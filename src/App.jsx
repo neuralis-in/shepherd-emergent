@@ -2094,7 +2094,7 @@ AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
   "mcpServers": {
     "shepherd": {
       "command": "${installMethod === 'uvx' ? 'uvx' : 'shepherd-mcp'}",
-      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '[]'},
+      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '["start"]'},
       "env": {
         "AIOBS_API_KEY": "aiobs_sk_xxxx"
       }
@@ -2106,7 +2106,7 @@ AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
   "mcpServers": {
     "shepherd": {
       "command": "${installMethod === 'uvx' ? 'uvx' : 'shepherd-mcp'}",
-      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '[]'},
+      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '["start"]'},
       "env": {
         "AIOBS_API_KEY": "aiobs_sk_xxxx"
       }
