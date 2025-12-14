@@ -11,7 +11,7 @@
       // string into just a query string, and then redirects the browser
       // to the new url with only a query string and hash fragment
       
-      var pathSegmentsToKeep = 1; // Keep '/shepherd' in the path
+      var pathSegmentsToKeep = 0; // Root deployment - no path segments to keep
 
       var l = window.location;
       l.replace(
