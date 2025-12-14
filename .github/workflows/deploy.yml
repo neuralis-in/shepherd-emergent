@@ -36,7 +36,6 @@ jobs:
         run: npm run build
         env:
           VITE_RAZORPAY_KEY_ID: ${{ secrets.VITE_RAZORPAY_KEY_ID }}
-          VITE_BASE_PATH: /shepherd-emergent/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

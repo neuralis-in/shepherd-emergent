@@ -186,7 +186,7 @@ function PaymentForm({ clientId, price, onSuccess }) {
         subscription_id: orderData.subscription_id,
         name: 'Shepherd',
         description: 'Enterprise Plan - Monthly Subscription',
-        image: `${import.meta.env.BASE_URL}shepherd.svg`,
+        image: '/shepherd.svg',
         handler: async function (response) {
           // Verify payment on backend
           try {

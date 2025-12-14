@@ -41,8 +41,7 @@ import {
   ChevronDown,
   ChevronRight,
   LogIn,
-  Target,
-  Settings2
+  Target
 } from 'lucide-react'
 import './App.css'
 import PromptEnhancement from './components/PromptEnhancement'
@@ -443,9 +442,9 @@ function Hero({ onOpenModal }) {
             Built on aiobs — open-source Python SDK
           </motion.div>
           <motion.div className="hero__title-wrapper" variants={fadeInUp}>
-            <a href="#shell" className="hero__cli-ribbon hero__cli-ribbon--live">
+            <a href="#mcp" className="hero__cli-ribbon hero__cli-ribbon--live">
               <Terminal size={10} />
-              <span>shepherd-cli v0.0.1</span>
+              <span>shepherd-mcp v0.0.1</span>
               <span className="hero__ribbon-badge">NEW</span>
             </a>
             <span className="hero__coming-soon-ribbon">
@@ -2006,97 +2005,49 @@ function ShepherdShell() {
   )
 }
 
-// Shepherd MCP Section - MCP Server Integration
+// Shepherd MCP Section - MCP Server for AI Observability
 function ShepherdMCP() {
-  const [activeTab, setActiveTab] = useState('setup')
-  const [installMethod, setInstallMethod] = useState('pip') // pip | uvx
-  const [client, setClient] = useState('cursor') // cursor | claude
-  const [copiedKey, setCopiedKey] = useState('')
-  const [openAccordion, setOpenAccordion] = useState('tools')
+  const [activeTab, setActiveTab] = useState('use')
+  const [expandedAccordions, setExpandedAccordions] = useState({ tools: true, prompts: false, workflow: false })
+  const [expandedConfigs, setExpandedConfigs] = useState({ cursor: false, claude: false, emergent: true })
 
-  const githubUrl = 'http://github.com/neuralis-in/shepherd-mcp'
+  const toggleAccordion = (key) => {
+    setExpandedAccordions(prev => ({ ...prev, [key]: !prev[key] }))
+  }
 
-  const features = [
-    {
-      icon: <Bot size={24} />,
-      title: 'MCP Protocol',
-      desc: 'Model Context Protocol support so assistants can query sessions, traces, and evaluations.'
-    },
-    {
-      icon: <Server size={24} />,
-      title: 'Runs Locally',
-      desc: 'The MCP server runs as a subprocess (stdio) and talks to Shepherd over HTTPS.'
-    },
-    {
-      icon: <Search size={24} />,
-      title: 'Search & Filters',
-      desc: 'Find sessions by provider/model, function name, errors, eval failures, and time windows.'
-    },
-    {
-      icon: <GitBranch size={24} />,
-      title: 'Session Diff',
-      desc: 'Compare two sessions to understand what changed and why your agent regressed.'
-    },
-    {
-      icon: <Zap size={24} />,
-      title: 'Fast Debug Loop',
-      desc: 'Use your IDE assistant to inspect traces without leaving your editor.'
-    },
-    {
-      icon: <Code size={24} />,
-      title: 'Client Compatible',
-      desc: 'Works with Cursor and Claude Desktop (and any MCP-compatible client).'
-    }
+  const toggleConfig = (key) => {
+    setExpandedConfigs(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  const availableTools = [
+    { name: 'list_sessions', desc: 'List recent AI agent sessions' },
+    { name: 'get_session', desc: "Inspect a session's trace tree + tool calls" },
+    { name: 'search_sessions', desc: 'Search by provider, model, labels, function, date, errors' },
+    { name: 'diff_sessions', desc: 'Compare two sessions and summarize changes' },
   ]
 
-  const tabs = [
-    {
-      id: 'setup',
-      icon: <Terminal size={16} />,
-      label: 'Setup'
-    },
-    {
-      id: 'configure',
-      icon: <Settings2 size={16} />,
-      label: 'Configure'
-    },
-    {
-      id: 'use',
-      icon: <Target size={16} />,
-      label: 'Use'
-    }
+  const promptTemplates = [
+    { prompt: '"List my recent AI agent sessions"', tool: 'list_sessions' },
+    { prompt: '"Get session details for abc123-def456"', tool: 'get_session' },
+    { prompt: '"Find all sessions that used OpenAI with errors"', tool: 'search_sessions' },
+    { prompt: '"Compare sessions abc123 and def456"', tool: 'diff_sessions' },
   ]
 
-  const setupCommands = [
-    {
-      id: 'pip',
-      label: 'pip',
-      cmd: 'pip install shepherd-mcp',
-      note: 'Install Shepherd MCP as a Python package.'
-    },
-    {
-      id: 'uvx',
-      label: 'uvx',
-      cmd: 'uvx shepherd-mcp',
-      note: 'Run instantly without installing globally.'
-    }
+  const workflows = [
+    { step: 1, title: 'Debug Failed Runs', desc: 'Show me all sessions that had errors in the last 24 hours' },
+    { step: 2, title: 'Performance Analysis', desc: 'Compare session abc123 with def456 and tell me which was more efficient' },
+    { step: 3, title: 'Prompt Regression', desc: 'Find sessions with failed evaluations' },
   ]
-
-  const startCmd = installMethod === 'uvx' ? 'uvx shepherd-mcp' : 'shepherd-mcp'
-  const runCmd = `${startCmd} start`
-
-  const envSnippet = `# .env
-AIOBS_API_KEY=aiobs_sk_xxxx
-# Optional
-AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
 
   const cursorConfig = `{
   "mcpServers": {
     "shepherd": {
-      "command": "${installMethod === 'uvx' ? 'uvx' : 'shepherd-mcp'}",
-      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '["start"]'},
+      "command": "uvx",
+      "args": ["shepherd-mcp"],
       "env": {
-        "AIOBS_API_KEY": "aiobs_sk_xxxx"
+        "AIOBS_API_KEY": "aiobs_sk_xxxx",
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-xxxx",
+        "LANGFUSE_SECRET_KEY": "sk-lf-xxxx"
       }
     }
   }
@@ -2105,8 +2056,24 @@ AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
   const claudeConfig = `{
   "mcpServers": {
     "shepherd": {
-      "command": "${installMethod === 'uvx' ? 'uvx' : 'shepherd-mcp'}",
-      "args": ${installMethod === 'uvx' ? '["shepherd-mcp"]' : '["start"]'},
+      "command": "uvx",
+      "args": ["shepherd-mcp"],
+      "env": {
+        "AIOBS_API_KEY": "aiobs_sk_xxxx",
+        "LANGFUSE_PUBLIC_KEY": "pk-lf-xxxx",
+        "LANGFUSE_SECRET_KEY": "sk-lf-xxxx"
+      }
+    }
+  }
+}`
+
+  const emergentConfig = `{
+  "mcpServers": {
+    "shepherd": {
+      "args": [
+        "shepherd-mcp"
+      ],
+      "command": "uvx",
       "env": {
         "AIOBS_API_KEY": "aiobs_sk_xxxx"
       }
@@ -2114,65 +2081,8 @@ AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
   }
 }`
 
-  const activeConfig = client === 'cursor' ? cursorConfig : claudeConfig
-
-  const copy = async (key, value) => {
-    try {
-      await navigator.clipboard.writeText(value)
-      setCopiedKey(key)
-      window.setTimeout(() => setCopiedKey(''), 1100)
-    } catch {
-      // no-op: clipboard may be blocked in some browsers
-    }
-  }
-
-  const integrations = [
-    { name: 'Cursor', icon: <Code size={20} /> },
-    { name: 'Claude Desktop', icon: <Bot size={20} /> },
-    { name: 'Windsurf', icon: <Activity size={20} /> },
-    { name: 'VS Code', icon: <Terminal size={20} /> }
-  ]
-
-  const tools = [
-    {
-      name: 'list_sessions',
-      desc: 'List recent AI agent sessions'
-    },
-    {
-      name: 'get_session',
-      desc: 'Inspect a session’s trace tree + tool calls'
-    },
-    {
-      name: 'search_sessions',
-      desc: 'Search by provider, model, labels, function, date, errors'
-    },
-    {
-      name: 'diff_sessions',
-      desc: 'Compare two sessions and summarize changes'
-    }
-  ]
-
-  const prompts = [
-    {
-      title: 'Debug a failing run',
-      prompt: 'Show me all sessions that had errors in the last 24 hours'
-    },
-    {
-      title: 'Performance analysis',
-      prompt: 'Compare session abc123 with session def456 and tell me which one was more efficient'
-    },
-    {
-      title: 'Prompt regression',
-      prompt: 'Find sessions using gpt-4o-mini model that failed evaluations'
-    },
-    {
-      title: 'Cost tracking',
-      prompt: 'List all sessions and summarize the total token usage'
-    }
-  ]
-
   return (
-    <section className="section mcp-section" id="shepherd-mcp">
+    <section className="section mcp-section" id="mcp">
       <div className="container">
         <motion.div
           className="mcp-section__content"
@@ -2183,448 +2093,414 @@ AIOBS_ENDPOINT=https://your-shepherd-endpoint.example.com`
         >
           <motion.div className="mcp-section__header" variants={fadeInUp}>
             <div className="mcp-section__badges">
-              <div className="mcp-section__badge mcp-section__badge--new">
-                <Zap size={12} />
-                New
+              <div className="mcp-section__badge mcp-section__badge--live">
+                <CheckCircle size={12} />
+                v0.0.1 Live
               </div>
               <div className="mcp-section__badge">
                 <Server size={14} />
-                MCP Server
-              </div>
-              <div className="mcp-section__badge">
-                <Container size={14} />
-                Local + Stdio
+                Model Context Protocol
               </div>
             </div>
-
-            <h2 className="heading-lg mcp-section__title">
-              <span className="mcp-section__title-icon" aria-hidden="true">
-                <Server size={22} />
-              </span>
-              Shepherd MCP
+            <h2 className="heading-md">
+              🔌 Shepherd MCP
             </h2>
-
-            <p className="text-lg">
-              MCP (Model Context Protocol) server for Shepherd — debug your AI agents like you debug your code.
-              Query sessions, traces, and evals directly from your assistant.
+            <p className="text-base">
+              MCP server that bridges AI observability platforms with AI-powered IDEs.
+              <strong> Debug agents without leaving your IDE.</strong>
             </p>
           </motion.div>
 
-          <motion.div className="mcp-section__panel" variants={fadeInUp}>
-            <div className="mcp-panel__top">
-              <div className="mcp-tabs" role="tablist" aria-label="Shepherd MCP">
-                {tabs.map((t) => (
-                  <button
-                    key={t.id}
-                    className={`mcp-tab ${activeTab === t.id ? 'mcp-tab--active' : ''}`}
-                    onClick={() => setActiveTab(t.id)}
-                    role="tab"
-                    aria-selected={activeTab === t.id}
+          {/* How It Works Card */}
+          <motion.div className="mcp-howto" variants={fadeInUp}>
+            <div className="mcp-howto__card">
+              {/* Tab Bar */}
+              <div className="mcp-howto__tabs-row">
+                <div className="mcp-howto__tabs">
+                  <button 
+                    className={`mcp-howto__tab ${activeTab === 'setup' ? 'mcp-howto__tab--active' : ''}`}
+                    onClick={() => setActiveTab('setup')}
                   >
-                    <span className="mcp-tab__icon">{t.icon}</span>
-                    <span className="mcp-tab__label">{t.label}</span>
+                    <Terminal size={14} />
+                    Setup
                   </button>
-                ))}
-              </div>
-
-              <div className="mcp-panel__actions">
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn--primary mcp-panel__cta"
-                >
-                  <Github size={16} />
-                  View on GitHub
-                </a>
-                <button
-                  className="btn btn--secondary mcp-panel__cta mcp-panel__cta--disabled"
-                  type="button"
-                  aria-disabled="true"
-                  title="Docs are coming soon"
-                >
-                  <ExternalLink size={16} />
-                  Docs (coming soon)
-                </button>
-              </div>
-            </div>
-
-            <div className="mcp-panel__body">
-              <AnimatePresence mode="wait">
-                {activeTab === 'setup' && (
-                  <motion.div
-                    key="setup"
-                    className="mcp-panel__grid"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0, transition: { duration: 0.25 } }}
-                    exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
+                  <button 
+                    className={`mcp-howto__tab ${activeTab === 'configure' ? 'mcp-howto__tab--active' : ''}`}
+                    onClick={() => setActiveTab('configure')}
                   >
-                    <div className="mcp-block">
-                      <div className="mcp-block__header">
-                        <h3 className="heading-md">Quick Start</h3>
-                        <p className="text-sm mcp-muted">Pick an install method, then start the server.</p>
+                    <Target size={14} />
+                    Configure
+                  </button>
+                  <button 
+                    className={`mcp-howto__tab ${activeTab === 'use' ? 'mcp-howto__tab--active' : ''}`}
+                    onClick={() => setActiveTab('use')}
+                  >
+                    <Box size={14} />
+                    Use
+                  </button>
+                </div>
+                <div className="mcp-howto__actions">
+                  <a 
+                    href="https://github.com/neuralis-in/shepherd-mcp" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="mcp-howto__btn mcp-howto__btn--primary"
+                  >
+                    <Github size={14} />
+                    View on GitHub
+                  </a>
+                  <a 
+                    href="https://neuralis-in.github.io/shepherd-mcp/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="mcp-howto__btn mcp-howto__btn--secondary"
+                  >
+                    <ExternalLink size={14} />
+                    Docs (coming soon)
+                  </a>
+                </div>
+              </div>
+
+              {/* Tab Content */}
+              <div className="mcp-howto__content">
+                <AnimatePresence mode="wait">
+                  {activeTab === 'setup' && (
+                    <motion.div
+                      key="setup"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mcp-howto__panel"
+                    >
+                      <div className="mcp-howto__main">
+                        <h3 className="mcp-howto__title">Installation</h3>
+                        <p className="mcp-howto__desc">Install shepherd-mcp via pip or run directly with uvx.</p>
+                        
+                        <div className="mcp-howto__code-block">
+                          <div className="mcp-howto__code-header">
+                            <span>pip</span>
+                            <button 
+                              className="mcp-howto__copy"
+                              onClick={() => navigator.clipboard.writeText('pip install shepherd-mcp')}
+                            >
+                              <Copy size={12} />
+                            </button>
+                          </div>
+                          <pre><code>pip install shepherd-mcp</code></pre>
+                        </div>
+
+                        <div className="mcp-howto__code-block">
+                          <div className="mcp-howto__code-header">
+                            <span>uvx (no install)</span>
+                            <button 
+                              className="mcp-howto__copy"
+                              onClick={() => navigator.clipboard.writeText('uvx shepherd-mcp')}
+                            >
+                              <Copy size={12} />
+                            </button>
+                          </div>
+                          <pre><code>uvx shepherd-mcp</code></pre>
+                        </div>
+
+                        <div className="mcp-howto__providers">
+                          <h4>Supported Providers</h4>
+                          <div className="mcp-howto__provider-list">
+                            <span className="mcp-howto__provider mcp-howto__provider--live">
+                              <CheckCircle size={12} /> AIOBS (Shepherd)
+                            </span>
+                            <span className="mcp-howto__provider mcp-howto__provider--live">
+                              <CheckCircle size={12} /> Langfuse
+                            </span>
+                            <span className="mcp-howto__provider mcp-howto__provider--soon">
+                              <Clock size={12} /> Agnost AI
+                            </span>
+                            <span className="mcp-howto__provider mcp-howto__provider--soon">
+                              <Clock size={12} /> DataDog
+                            </span>
+                            <span className="mcp-howto__provider mcp-howto__provider--soon">
+                              <Clock size={12} /> LangSmith
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="mcp-choice">
-                        {setupCommands.map((c) => (
-                          <button
-                            key={c.id}
-                            type="button"
-                            className={`mcp-choice__pill ${installMethod === c.id ? 'mcp-choice__pill--active' : ''}`}
-                            onClick={() => setInstallMethod(c.id)}
+                      <div className="mcp-howto__sidebar">
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <Zap size={18} />
+                          </div>
+                          <h4>Quick Start</h4>
+                          <p>Get up and running in under 2 minutes. Just install and configure your API keys.</p>
+                        </div>
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <Bot size={18} />
+                          </div>
+                          <h4>Works Everywhere</h4>
+                          <p>Compatible with Cursor, Claude Desktop, Emergent, and any MCP-enabled IDE.</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {activeTab === 'configure' && (
+                    <motion.div
+                      key="configure"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mcp-howto__panel"
+                    >
+                      <div className="mcp-howto__main">
+                        <h3 className="mcp-howto__title">Configuration</h3>
+                        <p className="mcp-howto__desc">Add shepherd-mcp to your IDE's MCP configuration.</p>
+                        
+                        {/* Emergent Config Accordion */}
+                        <div className="mcp-howto__config-accordion">
+                          <button 
+                            className={`mcp-howto__config-header ${expandedConfigs.emergent ? 'mcp-howto__config-header--open' : ''}`}
+                            onClick={() => toggleConfig('emergent')}
                           >
-                            <span className="mcp-choice__label">{c.label}</span>
-                            <span className="mcp-choice__note">{c.note}</span>
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="mcp-code-stack">
-                        <div className="mcp-code-card">
-                          <div className="mcp-code-card__top">
-                            <span className="mcp-code-card__label">Install</span>
-                            <button
-                              className="mcp-code-card__copy"
-                              type="button"
-                              onClick={() => copy('install', setupCommands.find((c) => c.id === installMethod)?.cmd || '')}
-                              title="Copy"
-                            >
-                              {copiedKey === 'install' ? <Check size={14} /> : <Copy size={14} />}
-                              {copiedKey === 'install' ? 'Copied' : 'Copy'}
-                            </button>
-                          </div>
-                          <pre className="mcp-code-card__code">{setupCommands.find((c) => c.id === installMethod)?.cmd}</pre>
-                        </div>
-
-                        <div className="mcp-code-card">
-                          <div className="mcp-code-card__top">
-                            <span className="mcp-code-card__label">Run</span>
-                            <button
-                              className="mcp-code-card__copy"
-                              type="button"
-                              onClick={() => copy('run', runCmd)}
-                              title="Copy"
-                            >
-                              {copiedKey === 'run' ? <Check size={14} /> : <Copy size={14} />}
-                              {copiedKey === 'run' ? 'Copied' : 'Copy'}
-                            </button>
-                          </div>
-                          <pre className="mcp-code-card__code">{runCmd}</pre>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mcp-aside">
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><Activity size={18} /></div>
-                        <h4 className="heading-sm">How it works</h4>
-                        <p className="text-sm">
-                          Your MCP client launches <code>shepherd-mcp</code> and communicates over stdio.
-                          The server calls Shepherd’s API to query sessions and trace trees.
-                        </p>
-                      </div>
-
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><Layers size={18} /></div>
-                        <h4 className="heading-sm">Works with</h4>
-                        <div className="mcp-integrations-list mcp-integrations-list--compact">
-                          {integrations.map((integration, i) => (
-                            <div key={i} className="mcp-integration-item">
-                              <div className="mcp-integration-item__icon">{integration.icon}</div>
-                              <span className="mcp-integration-item__name">{integration.name}</span>
+                            <div className="mcp-howto__config-label">
+                              <span className="mcp-howto__config-name mcp-howto__config-name--emergent">Emergent</span>
+                              <span className="mcp-howto__config-file">mcp.json</span>
                             </div>
-                          ))}
+                            <div className="mcp-howto__config-actions">
+                              <button 
+                                className="mcp-howto__copy"
+                                onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(emergentConfig); }}
+                              >
+                                <Copy size={12} />
+                              </button>
+                              <ChevronDown size={16} className="mcp-howto__config-chevron" />
+                            </div>
+                          </button>
+                          {expandedConfigs.emergent && (
+                            <div className="mcp-howto__config-content">
+                              <pre><code>{emergentConfig}</code></pre>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Cursor Config Accordion */}
+                        <div className="mcp-howto__config-accordion">
+                          <button 
+                            className={`mcp-howto__config-header ${expandedConfigs.cursor ? 'mcp-howto__config-header--open' : ''}`}
+                            onClick={() => toggleConfig('cursor')}
+                          >
+                            <div className="mcp-howto__config-label">
+                              <span className="mcp-howto__config-name">Cursor</span>
+                              <span className="mcp-howto__config-file">.cursor/mcp.json</span>
+                            </div>
+                            <div className="mcp-howto__config-actions">
+                              <button 
+                                className="mcp-howto__copy"
+                                onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(cursorConfig); }}
+                              >
+                                <Copy size={12} />
+                              </button>
+                              <ChevronDown size={16} className="mcp-howto__config-chevron" />
+                            </div>
+                          </button>
+                          {expandedConfigs.cursor && (
+                            <div className="mcp-howto__config-content">
+                              <pre><code>{cursorConfig}</code></pre>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Claude Desktop Config Accordion */}
+                        <div className="mcp-howto__config-accordion">
+                          <button 
+                            className={`mcp-howto__config-header ${expandedConfigs.claude ? 'mcp-howto__config-header--open' : ''}`}
+                            onClick={() => toggleConfig('claude')}
+                          >
+                            <div className="mcp-howto__config-label">
+                              <span className="mcp-howto__config-name">Claude Desktop</span>
+                              <span className="mcp-howto__config-file">claude_desktop_config.json</span>
+                            </div>
+                            <div className="mcp-howto__config-actions">
+                              <button 
+                                className="mcp-howto__copy"
+                                onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(claudeConfig); }}
+                              >
+                                <Copy size={12} />
+                              </button>
+                              <ChevronDown size={16} className="mcp-howto__config-chevron" />
+                            </div>
+                          </button>
+                          {expandedConfigs.claude && (
+                            <div className="mcp-howto__config-content">
+                              <pre><code>{claudeConfig}</code></pre>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
 
-                {activeTab === 'configure' && (
-                  <motion.div
-                    key="configure"
-                    className="mcp-panel__grid"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0, transition: { duration: 0.25 } }}
-                    exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
-                  >
-                    <div className="mcp-block">
-                      <div className="mcp-block__header">
-                        <h3 className="heading-md">Configuration</h3>
-                        <p className="text-sm mcp-muted">
-                          Shepherd MCP auto-loads <code>.env</code> files from your project root.
-                          You can also pass env vars directly in your MCP client config.
-                        </p>
-                      </div>
-
-                      <div className="mcp-config-row">
-                        <div className="mcp-config-row__label">
-                          <HardDrive size={16} />
-                          <span>Environment</span>
-                        </div>
-                        <button
-                          className="mcp-config-row__copy"
-                          type="button"
-                          onClick={() => copy('env', envSnippet)}
-                          title="Copy"
-                        >
-                          {copiedKey === 'env' ? <Check size={14} /> : <Copy size={14} />}
-                          {copiedKey === 'env' ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-                      <pre className="mcp-config__code">{envSnippet}</pre>
-
-                      <div className="mcp-config-controls">
-                        <div className="mcp-toggle">
-                          <span className="mcp-toggle__label">Client</span>
-                          <div className="mcp-toggle__group">
-                            <button
-                              type="button"
-                              className={`mcp-toggle__btn ${client === 'cursor' ? 'mcp-toggle__btn--active' : ''}`}
-                              onClick={() => setClient('cursor')}
-                            >
-                              Cursor
-                            </button>
-                            <button
-                              type="button"
-                              className={`mcp-toggle__btn ${client === 'claude' ? 'mcp-toggle__btn--active' : ''}`}
-                              onClick={() => setClient('claude')}
-                            >
-                              Claude Desktop
-                            </button>
+                      <div className="mcp-howto__sidebar">
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <Database size={18} />
                           </div>
+                          <h4>Environment Variables</h4>
+                          <p>AIOBS_API_KEY, LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY — set what you need.</p>
                         </div>
-
-                        <div className="mcp-toggle">
-                          <span className="mcp-toggle__label">Install method</span>
-                          <div className="mcp-toggle__group">
-                            <button
-                              type="button"
-                              className={`mcp-toggle__btn ${installMethod === 'pip' ? 'mcp-toggle__btn--active' : ''}`}
-                              onClick={() => setInstallMethod('pip')}
-                            >
-                              pip
-                            </button>
-                            <button
-                              type="button"
-                              className={`mcp-toggle__btn ${installMethod === 'uvx' ? 'mcp-toggle__btn--active' : ''}`}
-                              onClick={() => setInstallMethod('uvx')}
-                            >
-                              uvx
-                            </button>
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <Code size={18} />
                           </div>
+                          <h4>.env Support</h4>
+                          <p>Automatically loads .env files from current or parent directories.</p>
                         </div>
                       </div>
+                    </motion.div>
+                  )}
 
-                      <div className="mcp-config-row mcp-config-row--spaced">
-                        <div className="mcp-config-row__label">
-                          <Box size={16} />
-                          <span>MCP JSON</span>
+                  {activeTab === 'use' && (
+                    <motion.div
+                      key="use"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mcp-howto__panel"
+                    >
+                      <div className="mcp-howto__main">
+                        <h3 className="mcp-howto__title">Tools + Prompts</h3>
+                        <p className="mcp-howto__desc">Ask your assistant to call MCP tools — then drill into the trace tree.</p>
+                        
+                        {/* Available Tools Accordion */}
+                        <div className="mcp-howto__accordion">
+                          <button 
+                            className={`mcp-howto__accordion-header ${expandedAccordions.tools ? 'mcp-howto__accordion-header--open' : ''}`}
+                            onClick={() => toggleAccordion('tools')}
+                          >
+                            <div className="mcp-howto__accordion-icon">
+                              <Box size={16} />
+                            </div>
+                            <span>Available tools</span>
+                            <ChevronDown size={16} className="mcp-howto__accordion-chevron" />
+                          </button>
+                          {expandedAccordions.tools && (
+                            <div className="mcp-howto__accordion-content">
+                              {availableTools.map((tool) => (
+                                <div key={tool.name} className="mcp-howto__tool">
+                                  <code>{tool.name}</code>
+                                  <span>{tool.desc}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <button
-                          className="mcp-config-row__copy"
-                          type="button"
-                          onClick={() => copy('json', activeConfig)}
-                          title="Copy"
-                        >
-                          {copiedKey === 'json' ? <Check size={14} /> : <Copy size={14} />}
-                          {copiedKey === 'json' ? 'Copied' : 'Copy'}
-                        </button>
-                      </div>
-                      <pre className="mcp-config__code">{activeConfig}</pre>
 
-                      <p className="text-sm mcp-muted mcp-note">
-                        Tip: if you prefer explicit config files, use <code>claude_desktop_config.json</code> for Claude Desktop
-                        or <code>.cursor/mcp.json</code> for Cursor.
-                      </p>
-                    </div>
+                        {/* Prompt Templates Accordion */}
+                        <div className="mcp-howto__accordion">
+                          <button 
+                            className={`mcp-howto__accordion-header ${expandedAccordions.prompts ? 'mcp-howto__accordion-header--open' : ''}`}
+                            onClick={() => toggleAccordion('prompts')}
+                          >
+                            <div className="mcp-howto__accordion-icon">
+                              <Target size={16} />
+                            </div>
+                            <span>Prompt templates</span>
+                            <ChevronDown size={16} className="mcp-howto__accordion-chevron" />
+                          </button>
+                          {expandedAccordions.prompts && (
+                            <div className="mcp-howto__accordion-content">
+                              {promptTemplates.map((item, i) => (
+                                <div key={i} className="mcp-howto__prompt">
+                                  <span className="mcp-howto__prompt-text">{item.prompt}</span>
+                                  <code className="mcp-howto__prompt-tool">→ {item.tool}</code>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
 
-                    <div className="mcp-aside">
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><AlertCircle size={18} /></div>
-                        <h4 className="heading-sm">Required</h4>
-                        <p className="text-sm">
-                          <strong>AIOBS_API_KEY</strong> is required. <strong>AIOBS_ENDPOINT</strong> is optional for custom environments.
-                        </p>
-                      </div>
-
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><Zap size={18} /></div>
-                        <h4 className="heading-sm">Zero friction</h4>
-                        <p className="text-sm">
-                          Put a <code>.env</code> in your repo root and Shepherd MCP will pick it up automatically.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 'use' && (
-                  <motion.div
-                    key="use"
-                    className="mcp-panel__grid"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0, transition: { duration: 0.25 } }}
-                    exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
-                  >
-                    <div className="mcp-block">
-                      <div className="mcp-block__header">
-                        <h3 className="heading-md">Tools + Prompts</h3>
-                        <p className="text-sm mcp-muted">
-                          Ask your assistant to call MCP tools — then drill into the trace tree.
-                        </p>
-                      </div>
-
-                      <div className="mcp-accordion" role="region" aria-label="Shepherd MCP tools">
-                        {[
-                          {
-                            id: 'tools',
-                            title: 'Available tools',
-                            icon: <Box size={16} />,
-                            content: (
-                              <div className="mcp-tools">
-                                {tools.map((t) => (
-                                  <div key={t.name} className="mcp-tool-row">
-                                    <code className="mcp-tool-row__name">{t.name}</code>
-                                    <span className="mcp-tool-row__desc">{t.desc}</span>
+                        {/* Recommended Workflow Accordion */}
+                        <div className="mcp-howto__accordion">
+                          <button 
+                            className={`mcp-howto__accordion-header ${expandedAccordions.workflow ? 'mcp-howto__accordion-header--open' : ''}`}
+                            onClick={() => toggleAccordion('workflow')}
+                          >
+                            <div className="mcp-howto__accordion-icon">
+                              <RotateCcw size={16} />
+                            </div>
+                            <span>Recommended workflow</span>
+                            <ChevronDown size={16} className="mcp-howto__accordion-chevron" />
+                          </button>
+                          {expandedAccordions.workflow && (
+                            <div className="mcp-howto__accordion-content">
+                              {workflows.map((item) => (
+                                <div key={item.step} className="mcp-howto__workflow">
+                                  <span className="mcp-howto__workflow-step">{item.step}</span>
+                                  <div className="mcp-howto__workflow-info">
+                                    <strong>{item.title}</strong>
+                                    <span>{item.desc}</span>
                                   </div>
-                                ))}
-                              </div>
-                            )
-                          },
-                          {
-                            id: 'prompts',
-                            title: 'Prompt templates',
-                            icon: <Target size={16} />,
-                            content: (
-                              <div className="mcp-prompts">
-                                {prompts.map((p) => (
-                                  <div key={p.title} className="mcp-prompt-card">
-                                    <div className="mcp-prompt-card__top">
-                                      <span className="mcp-prompt-card__title">{p.title}</span>
-                                      <button
-                                        className="mcp-prompt-card__copy"
-                                        type="button"
-                                        onClick={() => copy(`prompt-${p.title}`, p.prompt)}
-                                        title="Copy"
-                                      >
-                                        {copiedKey === `prompt-${p.title}` ? <Check size={14} /> : <Copy size={14} />}
-                                        {copiedKey === `prompt-${p.title}` ? 'Copied' : 'Copy'}
-                                      </button>
-                                    </div>
-                                    <pre className="mcp-prompt-card__prompt">{p.prompt}</pre>
-                                  </div>
-                                ))}
-                              </div>
-                            )
-                          },
-                          {
-                            id: 'workflow',
-                            title: 'Recommended workflow',
-                            icon: <RotateCcw size={16} />,
-                            content: (
-                              <ol className="mcp-steps">
-                                <li>Search sessions that failed (errors/evals_failed).</li>
-                                <li>Open a specific session and inspect the trace tree.</li>
-                                <li>Diff against a “known-good” run to isolate regressions.</li>
-                                <li>Fix prompt/tooling, rerun, and verify the diff closes.</li>
-                              </ol>
-                            )
-                          }
-                        ].map((item) => (
-                          <div key={item.id} className={`mcp-accordion__item ${openAccordion === item.id ? 'is-open' : ''}`}>
-                            <button
-                              type="button"
-                              className="mcp-accordion__trigger"
-                              onClick={() => setOpenAccordion(openAccordion === item.id ? '' : item.id)}
-                              aria-expanded={openAccordion === item.id}
-                            >
-                              <span className="mcp-accordion__left">
-                                <span className="mcp-accordion__icon">{item.icon}</span>
-                                <span className="mcp-accordion__title">{item.title}</span>
-                              </span>
-                              <ChevronDown className="mcp-accordion__chev" size={18} />
-                            </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
 
-                            <AnimatePresence initial={false}>
-                              {openAccordion === item.id && (
-                                <motion.div
-                                  key="content"
-                                  className="mcp-accordion__content"
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: 'auto', opacity: 1, transition: { duration: 0.22 } }}
-                                  exit={{ height: 0, opacity: 0, transition: { duration: 0.18 } }}
-                                >
-                                  <div className="mcp-accordion__inner">{item.content}</div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
+                      <div className="mcp-howto__sidebar">
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <Clock size={18} />
                           </div>
-                        ))}
+                          <h4>Great for on-call</h4>
+                          <p>When an agent fails in prod, ask your IDE to fetch the exact run and explain the failure path.</p>
+                        </div>
+                        <div className="mcp-howto__info-card">
+                          <div className="mcp-howto__info-icon">
+                            <BarChart3 size={18} />
+                          </div>
+                          <h4>Scale debugging</h4>
+                          <p>Use search filters to spot patterns across runs (providers/models/functions) and prevent regressions.</p>
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="mcp-aside">
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><Clock size={18} /></div>
-                        <h4 className="heading-sm">Great for on-call</h4>
-                        <p className="text-sm">
-                          When an agent fails in prod, ask your IDE to fetch the exact run and explain the failure path.
-                        </p>
-                      </div>
-
-                      <div className="mcp-aside__card">
-                        <div className="mcp-aside__icon"><BarChart3 size={18} /></div>
-                        <h4 className="heading-sm">Scale debugging</h4>
-                        <p className="text-sm">
-                          Use search filters to spot patterns across runs (providers/models/functions) and prevent regressions.
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </motion.div>
 
-          <motion.div className="mcp-section__features" variants={fadeInUp}>
-            <h3 className="heading-md mcp-section__features-title">Capabilities</h3>
-            <div className="mcp-features-grid">
-              {features.map((feature, i) => (
-                <motion.div
-                  key={i}
-                  className="mcp-feature-card"
-                  variants={fadeInUp}
-                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                >
-                  <div className="mcp-feature-card__icon">{feature.icon}</div>
-                  <h4 className="mcp-feature-card__title">{feature.title}</h4>
-                  <p className="mcp-feature-card__desc">{feature.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
+          {/* CTA */}
           <motion.div className="mcp-section__cta" variants={fadeInUp}>
+            <div className="mcp-section__install">
+              <code>pip install shepherd-mcp</code>
+              <button 
+                className="mcp-section__copy-btn"
+                onClick={() => navigator.clipboard.writeText('pip install shepherd-mcp')}
+                title="Copy to clipboard"
+              >
+                <Copy size={14} />
+              </button>
+            </div>
+            <p className="mcp-section__cta-subtext">
+              Or run with <code>uvx shepherd-mcp</code> • Works with Claude Desktop, Cursor & more
+            </p>
             <div className="mcp-section__cta-buttons">
-              <a
-                href={githubUrl}
-                target="_blank"
+              <a 
+                href="https://github.com/neuralis-in/shepherd-mcp" 
+                target="_blank" 
                 rel="noopener noreferrer"
                 className="btn btn--primary"
               >
                 <Github size={16} />
                 View on GitHub
               </a>
-              <button
-                className="btn btn--secondary mcp-panel__cta--disabled"
-                type="button"
-                aria-disabled="true"
-                title="Docs are coming soon"
+              <a 
+                href="https://pypi.org/project/shepherd-mcp/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn--secondary"
               >
                 <ExternalLink size={16} />
-                Docs (coming soon)
-              </button>
+                PyPI Package
+              </a>
             </div>
           </motion.div>
         </motion.div>
